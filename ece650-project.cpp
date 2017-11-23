@@ -8,8 +8,8 @@ int main() {
     std::string user_input;
     int result;
     int num_vert;
-    Matrix::Matrix edges = Matrix(0, 0, 0);
-    Matrix::Matrix edges_cpy = Matrix(0, 0, 0);
+    Matrix edges = Matrix(0, 0, 0);
+    Matrix edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1;
     std::vector<int> approx_vc2;
     int most_edges = -1;

@@ -7,12 +7,6 @@
 //Replaces strings with other strings
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
 
-//takes the user input and puts it into the matrix 'edges'
-int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_vert);
-
-//sorts and sends to std::cout the min vertex cover
-void vc_output(std::string algorithm, std::vector<int> vc);
-
 class Matrix {
 private:
     int rows = 0, cols = 0, edgenum = 0;
@@ -25,3 +19,9 @@ public:
         matrix.resize(rows * cols, str_value);
     }
 };
+
+//takes the user input and puts it into the matrix 'edges'
+int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_vert);
+
+//sorts and sends to std::cout the min vertex cover
+void vc_output(std::string algorithm, std::vector<int> vc);

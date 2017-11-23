@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 //Replaces strings with other strings
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);

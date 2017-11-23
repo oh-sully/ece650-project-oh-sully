@@ -17,15 +17,15 @@ private:
     int rows = 0, cols = 0, edgenum = 0;
 public:
     std::vector<bool> matrix;
-    
+
     Matrix(int n, int k, bool str_value) {
         rows = n;
         cols = k;
         matrix.resize(rows * cols, str_value);
     }
 
-    void copy(vector<bool> copy) {
-        this->resize(copy.size(), 0);
+    void copy(std::vector<bool> copy) {
+        this->matrix.resize(copy.size(), 0);
         for (int i = 0; i < copy.size(); i++){
             this->value(copy.value(i));
         }

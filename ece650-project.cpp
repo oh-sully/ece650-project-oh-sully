@@ -53,7 +53,7 @@ public:
    		for (int i = 0; i < v; i++) {
     		this->edit(v, i, 0);
     	}
-        for (int n = v + 1; n < rows; n++){
+        for (int n = v; n < rows; n++){
             this->edit(n, v, 0);
         }
     }

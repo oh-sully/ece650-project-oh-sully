@@ -182,7 +182,7 @@ int main() {
 
 
     		//APPROX-VC-2
-            for (int r = 1; a < num_vert; a++){
+            for (int r = 1; r < num_vert; r++){
             	//checks to see if this vertex was already included in an edge
             	for (int s = 0; s < approx_vc2.size(); s++) {
             		if (r == approx_vc2[s]){

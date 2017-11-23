@@ -34,15 +34,15 @@ int main() {
         	while (true) {
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {
-            		if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
+            		if (edges_cpy.Matrix::num_of_edges(v) > edges_cpy.Matrix::num_of_edges(most_edges)) {
             			most_edges = v;
             		}
             	}
-            	if (edges_cpy.num_of_edges() == 0){
+            	if (edges_cpy.Matrix::num_of_edges() == 0){
             		break;
             	}
             	approx_vc1.push_back(most_edges);
-                edges_cpy.clear_edges(most_edges);
+                edges_cpy.Matrix::clear_edges(most_edges);
 
             }
             vc_output("APPROX-VC-1", approx_vc1);
@@ -54,7 +54,7 @@ int main() {
             for (int r = 0; r < num_vert; r++){
             	//adds both vertices from the edge to 
             	for (int c = 0; c < num_vert; c++){
-            		if (edges_cpy.value(r,c) == true) {
+            		if (edges_cpy.Matrix::value(r,c) == true) {
             			approx_vc2.push_back(r);
             			approx_vc2.push_back(c);
             			edges_cpy.clear_edges(r);

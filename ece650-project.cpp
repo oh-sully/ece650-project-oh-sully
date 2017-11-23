@@ -99,14 +99,12 @@ int main() {
     Matrix edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1;
     std::vector<int> approx_vc2;
-    bool cleared_flag = 0;
     int most_edges = -1;
     
     while(true){
         
         user_input   = "";
         command      = 'x';
-        cleared_flag = 0;
         
         getline(std::cin, user_input);
         if (std::cin.eof()) {

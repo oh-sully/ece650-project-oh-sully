@@ -175,7 +175,7 @@ int main() {
             	if (most_edges == 0){
             		break;
             	}
-                std::cout << "Most edges = " << std::endl;
+                std::cout << "Most edges = " << most_edges << std::endl;
             	approx_vc1.push_back(most_edges);
             	edges.clear_copyrow(most_edges);
                 edges.print();

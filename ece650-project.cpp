@@ -25,15 +25,20 @@ public:
     }
 
     void copy(std::vector<bool> copy) {
+        std::cout << "copy.size() = " << copy.size() << std::endl;
         this->matrix.resize(copy.size());
         for (int i = 0; i < copy.size(); i++){
-            this->value(copy[i]);
+            this->edit(i, copy[i]);
         }
     }
     
     void edit(int n, int k, bool value) {
         this->matrix[cols * n + k] = value;
     }
+
+    void edit(int i, bool value) {
+        this->matrix[i] = value;
+    }    
     
     int value(int n, int k) {
         return this->matrix[cols * n + k];

@@ -80,8 +80,8 @@ int main() {
     //unsigned int low_k;
     Matrix edges = Matrix(0, 0, 0);
     bool sat_flag;
-    std::vector<int> vcov;
-    bool sat = false;
+    //std::vector<int> vcov;
+    //bool sat = false;
     // -- allocate on the heap so that we can reset later if needed
     //std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
     //Minisat::vec<Minisat::Lit> lits;
@@ -99,7 +99,7 @@ int main() {
         //num_clause = 0; //*REMOVE* when ready to submit
         user_input = "";
         command = NULL;
-        sat_flag = 0;
+        //sat_flag = 0;
         num_edges = 0;
         cleared_flag = 0;
         
@@ -113,7 +113,7 @@ int main() {
         if (command == 'V'){
             iss >> num_vert;
             edges = Matrix(0, 0, 0);
-            vcov.resize(num_vert, -1);
+            //vcov.resize(num_vert, -1);
             //cover_size = num_vert;
             edges = Matrix(num_vert, num_vert, 0);
         }
@@ -179,6 +179,7 @@ int main() {
             }
             std::cout << std::endl;
             edges.copy_all();
+            approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 
     		//APPROX-VC-2
@@ -214,6 +215,7 @@ int main() {
             }
             std::cout << std::endl;
             edges.copy_all();
+            approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
 
 
         }

@@ -66,9 +66,9 @@ public:
     //print adjecency matrix
     
     void print() {        
-        for (int r = 0; r < num_vert; r++) {
-            for (int c = 0; c < num_vert; c++){
-                std::cout << edges.value(r,c) << "  ";
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++){
+                std::cout << this.value(r,c) << "  ";
             }
             std::cout << std::endl;
         }

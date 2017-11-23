@@ -63,6 +63,16 @@ public:
     	}
     }
 
+    //print adjecency matrix
+    
+    void print() {        
+        for (int r = 0; r < num_vert; r++) {
+            for (int c = 0; c < num_vert; c++){
+                std::cout << edges.value(r,c) << "  ";
+            }
+            std::cout << std::endl;
+        }
+    }
 };
     
 int main() {
@@ -148,15 +158,8 @@ int main() {
                 edges.edit(vert2, vert1, true);
                 num_edges++;
             }
-            
-            //print adjecency matrix
-            
-            for (int r = 0; r < num_vert; r++){
-            	for (int c = 0; c < num_vert; c++){
-            		std::cout << edges.value(r,c) << "  ";
-            	}
-            	std::cout << std::endl;
-            }
+
+            edges.print();
 
         	//APPROX-VC-1
         	while (true) {
@@ -171,6 +174,7 @@ int main() {
             	}
             	approx_vc1.push_back(most_edges);
             	edges.clear_copyrow(most_edges);
+                edges.print();
             }
             std::sort(approx_vc1.begin(), approx_vc1.end());
             std::cout << "APPROX-VC-1: ";

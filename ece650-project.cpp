@@ -165,12 +165,12 @@ int main() {
             }
             std::cout << std::endl;
 
-            edges_cpy.copy(edges.matrix);
+            edges_cpy = edges;
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 
     		//APPROX-VC-2
-            for (int r = 1; r < num_vert; r++){
+            for (int r = 0; r < num_vert; r++){
             	//checks to see if this vertex was already included in an edge
             	for (int s = 0; s < approx_vc2.size(); s++) {
             		if (r == approx_vc2[s]){
@@ -184,7 +184,7 @@ int main() {
             		continue;
             	}
             	//adds both vertices from the edge to 
-            	for (int c = 0; c < r; c ++){
+            	for (int c = 0; c < num_vert; c++){
             		if (edges_cpy.value(r,c) == true) {
             			approx_vc2.push_back(r);
             			approx_vc2.push_back(c);
@@ -201,7 +201,6 @@ int main() {
             	std::cout << approx_vc2[s] << " ";
             }
             std::cout << std::endl;
-            edges.copy_all();
             approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
 
 

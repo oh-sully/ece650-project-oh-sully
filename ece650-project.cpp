@@ -25,7 +25,7 @@ public:
     }
 
     void copy(std::vector<bool> copy) {
-        this->matrix.resize(copy.size(), 0);
+        this->matrix.resize(copy.size());
         for (int i = 0; i < copy.size(); i++){
             this->value(copy[i]);
         }
@@ -155,6 +155,7 @@ int main() {
         	//APPROX-VC-1
             edges_cpy.copy(edges.matrix);
         	while (true) {
+                std::cout << "edges.matrix.size() = " << edges.matrix.size() << std::endl;
                 edges_cpy.print();
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {

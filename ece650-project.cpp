@@ -42,7 +42,7 @@ public:
     int num_of_edges(int v){
     	edgenum = 0;
     	for (int i = 0; i < v; i++){
-    		if (this->matrix.value(v,i) == true){
+    		if (this->value(v,i) == true){
     			edgenum++;
     		}
     	}
@@ -50,7 +50,7 @@ public:
     }
 
     void clear_copyrow(int v) {
-   		for (int i = 0; i < v; j++) {
+   		for (int i = 0; i < v; i++) {
     		this->edit(v, i, 0);
     	}
     }
@@ -75,21 +75,21 @@ int main() {
     //int cover_size;
     int vert1;
     int vert2;
-    unsigned int k;
-    unsigned int up_k;
-    unsigned int low_k;
+    //unsigned int k;
+    //unsigned int up_k;
+    //unsigned int low_k;
     Matrix edges = Matrix(0, 0, 0);
     bool sat_flag;
     std::vector<int> vcov;
     bool sat = false;
     // -- allocate on the heap so that we can reset later if needed
-    std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
-    Minisat::vec<Minisat::Lit> lits;
-    Minisat::vec<Minisat::Lit> clause;
+    //std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
+    //Minisat::vec<Minisat::Lit> lits;
+    //Minisat::vec<Minisat::Lit> clause;
     //int num_lits;
     //int num_clause;
-    std::vector<int> approx-vc1;
-    std::vector<int> approx-vc2;
+    std::vector<int> approx_vc1;
+    std::vector<int> approx_vc2;
     bool cleared_flag = 0;
     int most_edges = -1;
     
@@ -169,13 +169,13 @@ int main() {
             	if (most_edges == 0){
             		break;
             	}
-            	approx-vc1.push_back(most_edges);
+            	approx_vc1.push_back(most_edges);
             	edges.clear_copyrow(most_edges);
             }
-            std::sort(approx-vc1.begin(), approx-vc1.end());
-            std::cout << "APPROX-VC-1: "
-            for (int s = 0; s < approx-vc1.size(); s++) {
-            	std::cout << approx-vc1[s] << " ";
+            std::sort(approx_vc1.begin(), approx_vc1.end());
+            std::cout << "APPROX-VC-1: ";
+            for (int s = 0; s < approx_vc1.size(); s++) {
+            	std::cout << approx_vc1[s] << " ";
             }
             std::cout << std::endl;
             edges.copy_all();
@@ -184,8 +184,8 @@ int main() {
     		//APPROX-VC-2
             for (int r = 1; a < num_vert; a++){
             	//checks to see if this vertex was already included in an edge
-            	for (int s = 0; s < approx-vc2.size(); s++) {
-            		if (r == approx-vc2[s]){
+            	for (int s = 0; s < approx_vc2.size(); s++) {
+            		if (r == approx_vc2[s]){
             			cleared_flag == 1;
             			break;
             		}
@@ -198,8 +198,8 @@ int main() {
             	//adds both vertices from the edge to 
             	for (int c = 0; c < r; c ++){
             		if (edges.value(r,c) == true) {
-            			approx-vc2.push_back(r);
-            			approx-vc2.push_back(c);
+            			approx_vc2.push_back(r);
+            			approx_vc2.push_back(c);
             			edges.clear_copyrow(r);
             			edges.clear_copyrow(c);
             			break;
@@ -207,10 +207,10 @@ int main() {
             	}
             }
             //sort and print min vertex cover
-            std::sort(approx-vc2.begin(), approx-vc2.end());
-            std::cout << "APPROX-VC-2: "
-            for (int s = 0; s < approx-vc2.size(); s++) {
-            	std::cout << approx-vc2[s] << " ";
+            std::sort(approx_vc2.begin(), approx_vc2.end());
+            std::cout << "APPROX-VC-2: ";
+            for (int s = 0; s < approx_vc2.size(); s++) {
+            	std::cout << approx_vc2[s] << " ";
             }
             std::cout << std::endl;
             edges.copy_all();

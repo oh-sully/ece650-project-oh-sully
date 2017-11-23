@@ -10,7 +10,7 @@ int value(int n, int k) {
     return this->matrix[cols * n + k];
 }
 
-int num_of_edges(int v){
+int Matrix::num_of_edges(int v){
 	edgenum = 0;
 	for (int c = 0; c < cols; c++){
 		if (this->value(v,c) == true){
@@ -20,7 +20,7 @@ int num_of_edges(int v){
 	return edgenum;
 }
 
-int num_of_edges(){
+int Matrix::num_of_edges(){
     for (int r = 0; r < rows; r++){
         for (int c = 0; c < cols; c++){
             if (this->value(r,c) == true){
@@ -32,7 +32,7 @@ int num_of_edges(){
     return edgenum;
 }
 
-void clear_edges(int v) {
+void Matrix::clear_edges(int v) {
 		for (int c = 0; c < cols; c++) {
 		this->edit(v, c, 0);
 	}
@@ -41,7 +41,7 @@ void clear_edges(int v) {
     }
 }
 
-void print() {        
+void Matrix::print() {        
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++){
             std::cout << this->value(r,c) << "  ";

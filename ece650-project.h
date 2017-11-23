@@ -18,6 +18,12 @@ public:
         cols = k;
         matrix.resize(rows * cols, str_value);
     }
+    void Matrix::edit(int n, int k, bool value);
+    int Matrix::value(int n, int k);
+    int Matrix::num_of_edges(int v);
+    int Matrix::num_of_edges();
+    void Matrix::clear_edges(int v);
+    void Matrix::print();
 };
 
 //takes the user input and puts it into the matrix 'edges'

@@ -2,15 +2,15 @@
 #include <iostream>
 #include <vector>
 
-void Matrix::edit(int n, int k, bool value) {
+void edit(int n, int k, bool value) {
         this->matrix[cols * n + k] = value;
     }
     
-int Matrix::value(int n, int k) {
+int value(int n, int k) {
     return this->matrix[cols * n + k];
 }
 
-int Matrix::num_of_edges(int v){
+int num_of_edges(int v){
 	edgenum = 0;
 	for (int c = 0; c < cols; c++){
 		if (this->value(v,c) == true){
@@ -20,7 +20,7 @@ int Matrix::num_of_edges(int v){
 	return edgenum;
 }
 
-int Matrix::num_of_edges(){
+int num_of_edges(){
     for (int r = 0; r < rows; r++){
         for (int c = 0; c < cols; c++){
             if (this->value(r,c) == true){
@@ -32,7 +32,7 @@ int Matrix::num_of_edges(){
     return edgenum;
 }
 
-void Matrix::clear_edges(int v) {
+void clear_edges(int v) {
 		for (int c = 0; c < cols; c++) {
 		this->edit(v, c, 0);
 	}
@@ -41,7 +41,7 @@ void Matrix::clear_edges(int v) {
     }
 }
 
-void Matrix::print() {        
+void print() {        
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++){
             std::cout << this->value(r,c) << "  ";

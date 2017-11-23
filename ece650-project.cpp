@@ -163,6 +163,7 @@ int main() {
             			most_edges = v;
             		}
             	}
+                std::cout << "num_of_edges() = " << edges_cpy.num_of_edges() << std::endl;
             	if (edges_cpy.num_of_edges() == 0){
             		break;
             	}

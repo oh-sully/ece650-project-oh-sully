@@ -191,8 +191,8 @@ int main() {
             		if (edges_cpy.value(r,c) == true) {
             			approx_vc2.push_back(r);
             			approx_vc2.push_back(c);
-            			edges_cpy.clear(r);
-            			edges_cpy.clear(c);
+            			edges_cpy.clear_edges(r);
+            			edges_cpy.clear_edges(c);
             			break;
             		}
             	}

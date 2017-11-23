@@ -152,11 +152,10 @@ int main() {
                 num_edges++;
             }
 
-            edges.print();
-
         	//APPROX-VC-1
             edges_cpy.copy(edges.matrix);
         	while (true) {
+                edges_cpy.print();
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {
             		if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {

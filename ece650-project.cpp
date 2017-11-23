@@ -27,17 +27,9 @@ public:
     void edit(int n, int k, bool value) {
         this->matrix[cols * n + k] = value;
     }
-
-    void edit(int i, bool value) {
-        this->matrix[i] = value;
-    }    
     
     int value(int n, int k) {
         return this->matrix[cols * n + k];
-    }
-
-    int value(int i) {
-        return this->matrix[i];
     }
 
     int num_of_edges(int v){
@@ -51,9 +43,11 @@ public:
     }
 
     int num_of_edges(){
-        for (int i = 0; i < this->matrix.size(); i++){
-            if (this->value(i) == true){
-                edgenum++;
+        for (int r = 0; r < rows; r++){
+            for (int c = 0; c < cols; c++){
+                if (this->value(r,c) == true){
+                    edgenum++;
+                }
             }
         }
         edgenum = edgenum / 2;
@@ -78,6 +72,20 @@ public:
         }
     }
 };
+
+void vc_output(std::string algorithm, std::vector<int> vc){
+    std::sort(vc.begin(), vc.end());
+    std::cout << algorithm << ": ";
+    for (unsigned int s = 0; s < vc.size(); s++) {
+        std::cout << vc[s];
+        if (s != vc.size() - 1){
+            std::cout << ",";
+        }
+        else{
+            std::cout << std::endl;
+        }
+    }
+}
     
 int main() {
     
@@ -85,7 +93,6 @@ int main() {
     std::string user_input;
     char command;
     int num_vert;
-    int num_edges;
     int vert1;
     int vert2;
     Matrix edges = Matrix(0, 0, 0);
@@ -98,8 +105,7 @@ int main() {
     while(true){
         
         user_input   = "";
-        command      = NULL;
-        num_edges    = 0;
+        command      = 'x';
         cleared_flag = 0;
         
         getline(std::cin, user_input);
@@ -111,7 +117,6 @@ int main() {
         
         if (command == 'V'){
             iss >> num_vert;
-            edges = Matrix(0, 0, 0);
             edges = Matrix(num_vert, num_vert, 0);
         }
         else if (command == 'E'){
@@ -120,10 +125,10 @@ int main() {
             ReplaceStringInPlace(edges_str, ",", " , ");
             ReplaceStringInPlace(edges_str, "> , <", " >,< ");
             ReplaceStringInPlace(edges_str, ">}", " >}");
-            
             std::istringstream isss(edges_str);
             std::string check_str;
             isss >> check_str;
+
             //If no edges found, print a blank line
             if (check_str == "{" || check_str == "{ " || check_str == "{}" || check_str == "{ }"){
                 std::cout << std::endl;
@@ -136,20 +141,19 @@ int main() {
                 isss >> check_str;
                 edges.edit(vert1, vert2, true);
                 edges.edit(vert2, vert1, true);
-                num_edges++;
             }
+
+
 
         	//APPROX-VC-1
             edges_cpy = edges;
         	while (true) {
-                edges_cpy.print();
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {
             		if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
             			most_edges = v;
             		}
             	}
-                std::cout << "num_of_edges() = " << edges_cpy.num_of_edges() << std::endl;
             	if (edges_cpy.num_of_edges() == 0){
             		break;
             	}
@@ -157,32 +161,15 @@ int main() {
                 edges_cpy.clear_edges(most_edges);
 
             }
-            std::sort(approx_vc1.begin(), approx_vc1.end());
-
-            std::cout << "APPROX-VC-1: ";
-            for (unsigned int s = 0; s < approx_vc1.size(); s++) {
-            	std::cout << approx_vc1[s] << " ";
-            }
-            std::cout << std::endl;
-
-            edges_cpy = edges;
+            vc_output("APPROX-VC-1", approx_vc1);
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 
+
+
     		//APPROX-VC-2
+            edges_cpy = edges;
             for (int r = 0; r < num_vert; r++){
-            	//checks to see if this vertex was already included in an edge
-            	for (int s = 0; s < approx_vc2.size(); s++) {
-            		if (r == approx_vc2[s]){
-            			cleared_flag == 1;
-            			break;
-            		}
-            	}
-            	//if a checked edge already had this vertex, skip this vertex
-            	if (cleared_flag == 1) {
-            		cleared_flag = 0;
-            		continue;
-            	}
             	//adds both vertices from the edge to 
             	for (int c = 0; c < num_vert; c++){
             		if (edges_cpy.value(r,c) == true) {
@@ -194,18 +181,9 @@ int main() {
             		}
             	}
             }
-            //sort and print min vertex cover
-            std::sort(approx_vc2.begin(), approx_vc2.end());
-            std::cout << "APPROX-VC-2: ";
-            for (unsigned int s = 0; s < approx_vc2.size(); s++) {
-            	std::cout << approx_vc2[s] << " ";
-            }
-            std::cout << std::endl;
+            vc_output("APPROX-VC-2", approx_vc2);
             approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
-
-
         }
     }
-
     return 0;
 }

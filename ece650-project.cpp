@@ -91,6 +91,8 @@ int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_ver
     
     int vert1;
     int vert2;
+    char command;
+    std::string edges_str;
     std::istringstream iss(user_input);
     iss >> command;    
     if (command == 'V') {
@@ -125,10 +127,10 @@ int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_ver
     
 int main() {
     
-    std::string edges_str;
+    //std::string edges_str;
     std::string user_input;
     int result;
-    char command;
+    //char command;
     int num_vert;
     //int vert1;
     //int vert2;
@@ -141,7 +143,7 @@ int main() {
     while(true){
         
         user_input   = "";
-        command      = 'x';
+        //command      = 'x';
         
         getline(std::cin, user_input);
         if (std::cin.eof()) {

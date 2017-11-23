@@ -27,7 +27,7 @@ public:
     void copy(std::vector<bool> copy) {
         this->matrix.resize(copy.size(), 0);
         for (int i = 0; i < copy.size(); i++){
-            this->value(copy.value(i));
+            this->value(copy[i]);
         }
     }
     
@@ -145,7 +145,7 @@ int main() {
             edges.print();
 
         	//APPROX-VC-1
-            edges_cpy.copy(edges);
+            edges_cpy.copy(edges.matrix);
         	while (true) {
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {
@@ -188,11 +188,11 @@ int main() {
             	}
             	//adds both vertices from the edge to 
             	for (int c = 0; c < r; c ++){
-            		if (edges.value(r,c) == true) {
+            		if (edges_cpy.value(r,c) == true) {
             			approx_vc2.push_back(r);
             			approx_vc2.push_back(c);
-            			edges.clear_copyrow(r);
-            			edges.clear_copyrow(c);
+            			edges_cpy.clear(r);
+            			edges_cpy.clear(c);
             			break;
             		}
             	}

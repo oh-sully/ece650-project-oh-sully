@@ -86,15 +86,52 @@ void vc_output(std::string algorithm, std::vector<int> vc){
         }
     }
 }
+
+int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_vert){
+    
+    int vert1;
+    int vert2;
+    std::istringstream iss(user_input);
+    iss >> command;    
+    if (command == 'V') {
+        iss >> num_vert;
+        edges = Matrix(num_vert, num_vert, 0);
+        return 1;
+    }
+    else if (command == 'E'){
+        iss >> edges_str;
+        ReplaceStringInPlace(edges_str, "{<", "{< ");
+        ReplaceStringInPlace(edges_str, ",", " , ");
+        ReplaceStringInPlace(edges_str, "> , <", " >,< ");
+        ReplaceStringInPlace(edges_str, ">}", " >}");
+        std::istringstream isss(edges_str);
+        std::string check_str;
+        isss >> check_str;
+        if (check_str == "{" || check_str == "{ " || check_str == "{}" || check_str == "{ }"){
+            return -1;
+        }
+        while (check_str != ">}") {
+            isss >> vert1;
+            isss >> check_str;
+            isss >> vert2;
+            isss >> check_str;
+            edges.edit(vert1, vert2, true);
+            edges.edit(vert2, vert1, true);
+        }
+        return 0;
+    }
+    return 1;
+}
     
 int main() {
     
     std::string edges_str;
     std::string user_input;
+    int result;
     char command;
     int num_vert;
-    int vert1;
-    int vert2;
+    //int vert1;
+    //int vert2;
     Matrix edges = Matrix(0, 0, 0);
     Matrix edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1;
@@ -110,6 +147,17 @@ int main() {
         if (std::cin.eof()) {
             break;
         }
+        result = parse_input_into_matrix(user_input, edges, num_vert);
+        if (result == 1){
+            continue;
+        }
+        else if (result == -1){
+            std::cout << std::endl;
+            continue;
+        }
+        else{
+        
+        /*
         std::istringstream iss(user_input);
         iss >> command;
         
@@ -140,7 +188,7 @@ int main() {
                 edges.edit(vert1, vert2, true);
                 edges.edit(vert2, vert1, true);
             }
-
+            */
 
 
         	//APPROX-VC-1

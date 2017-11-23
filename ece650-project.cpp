@@ -13,10 +13,11 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
 }
 
 class Matrix {
-    std::vector<bool> matrix;
 private:
     int rows = 0, cols = 0, edgenum = 0;
 public:
+    std::vector<bool> matrix;
+    
     Matrix(int n, int k, bool str_value) {
         rows = n;
         cols = k;

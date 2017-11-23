@@ -23,14 +23,6 @@ public:
         cols = k;
         matrix.resize(rows * cols, str_value);
     }
-
-    void copy(std::vector<bool> copy) {
-        std::cout << "copy.size() = " << copy.size() << std::endl;
-        this->matrix.resize(copy.size());
-        for (int i = 0; i < copy.size(); i++){
-            this->edit(i, copy[i]);
-        }
-    }
     
     void edit(int n, int k, bool value) {
         this->matrix[cols * n + k] = value;
@@ -76,17 +68,7 @@ public:
             this->edit(r, v, 0);
         }
     }
-
-    void copy_all(){
-    	for (int i = 0; i < rows; i ++) {
-    		for (int j = i + 1; j < cols; j++) {
-    			this->edit(j, i, this->value(i,j));
-    		}
-    	}
-    }
-
-    //print adjecency matrix
-    
+   
     void print() {        
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++){
@@ -158,9 +140,8 @@ int main() {
             }
 
         	//APPROX-VC-1
-            edges_cpy.copy(edges.matrix);
+            edges_cpy = edges;
         	while (true) {
-                std::cout << "edges.matrix.size() = " << edges.matrix.size() << std::endl;
                 edges_cpy.print();
         		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {

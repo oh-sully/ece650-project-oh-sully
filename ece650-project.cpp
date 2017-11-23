@@ -30,6 +30,19 @@ public:
         cols = k;
         matrix.resize(rows * cols, str_value);
     }
+
+    Matrix(Matrix copy) {
+        for (int i = 0; i < copy.size(); i++){
+            this->push_back(copy.value(i));
+        }
+    }
+
+    void copy(Matrix copy) {
+        this->resize(copy.size(), 0);
+        for (int i = 0; i < copy.size(); i++){
+            this->value(copy.value(i));
+        }
+    }
     
     void edit(int n, int k, bool value) {
         this->matrix[cols * n + k] = value;
@@ -39,22 +52,26 @@ public:
         return this->matrix[cols * n + k];
     }
 
+    int value(int i) {
+        return this->matrix[i];
+    }
+
     int num_of_edges(int v){
     	edgenum = 0;
-    	for (int i = 0; i < v; i++){
-    		if (this->value(v,i) == true){
+    	for (int c = 0; c < cols; c++){
+    		if (this->value(v,c) == true){
     			edgenum++;
     		}
     	}
     	return edgenum;
     }
 
-    void clear_copyrow(int v) {
-   		for (int i = 0; i < v; i++) {
-    		this->edit(v, i, 0);
+    void clear_edges(int v) {
+   		for (int c = 0; c < cols; c++) {
+    		this->edit(v, c, 0);
     	}
-        for (int n = v; n < rows; n++){
-            this->edit(n, v, 0);
+        for (int r = 0; r < rows; r++){
+            this->edit(r, v, 0);
         }
     }
 
@@ -92,6 +109,7 @@ int main() {
     //unsigned int up_k;
     //unsigned int low_k;
     Matrix edges = Matrix(0, 0, 0);
+    Matrix edges_cpy;
     bool sat_flag;
     //std::vector<int> vcov;
     //bool sat = false;
@@ -130,7 +148,6 @@ int main() {
             //cover_size = num_vert;
             edges = Matrix(num_vert, num_vert, 0);
         }
-        //reads the edges from the user and stores them in the matrix 'edges'
         else if (command == 'E'){
             iss >> edges_str;
             ReplaceStringInPlace(edges_str, "{<", "{< ");
@@ -151,12 +168,6 @@ int main() {
                 isss >> check_str;
                 isss >> vert2;
                 isss >> check_str;
-                /*
-                if (vert1 < 0 || vert1 > (num_vert - 1) || vert2 < 0 || vert2 > (num_vert - 1)) {
-                    std::cerr << "Error: Vertex out of range" << std::endl;
-                    break;
-                }
-                */
                 edges.edit(vert1, vert2, true);
                 edges.edit(vert2, vert1, true);
                 num_edges++;
@@ -165,28 +176,30 @@ int main() {
             edges.print();
 
         	//APPROX-VC-1
+            edges_cpy.copy(edges);
         	while (true) {
-        		most_edges = -1;
+        		most_edges = 0;
             	for (int v = 0; v < num_vert; v++) {
-            		if (edges.num_of_edges(v) > most_edges){
+            		if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
             			most_edges = v;
             		}
             	}
             	if (most_edges == 0){
             		break;
             	}
-                std::cout << "Most edges = " << most_edges << std::endl;
+                //std::cout << "Most edges = " << most_edges << std::endl;
             	approx_vc1.push_back(most_edges);
-            	edges.clear_copyrow(most_edges);
-                edges.print();
+                edges_cpy.clear_edges(most_edges);
             }
             std::sort(approx_vc1.begin(), approx_vc1.end());
+
             std::cout << "APPROX-VC-1: ";
             for (int s = 0; s < approx_vc1.size(); s++) {
             	std::cout << approx_vc1[s] << " ";
             }
             std::cout << std::endl;
-            edges.copy_all();
+
+            edges_cpy.cpy(edges);
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 

@@ -53,6 +53,16 @@ public:
     	return edgenum;
     }
 
+    int num_of_edges(){
+        for (int i = 0; i < this->matrix.size(); i++){
+            if (this->value(i) == true){
+                edgenum++;
+            }
+        }
+        edgenum = edgenum / 2;
+        return edgenum;
+    }
+
     void clear_edges(int v) {
    		for (int c = 0; c < cols; c++) {
     		this->edit(v, c, 0);
@@ -153,12 +163,12 @@ int main() {
             			most_edges = v;
             		}
             	}
-            	if (most_edges == 0){
+            	if (edges_cpy.num_of_edges() == 0){
             		break;
             	}
-                //std::cout << "Most edges = " << most_edges << std::endl;
             	approx_vc1.push_back(most_edges);
                 edges_cpy.clear_edges(most_edges);
+
             }
             std::sort(approx_vc1.begin(), approx_vc1.end());
 

@@ -34,13 +34,13 @@ public:
     }
 
     int num_of_edges(int v){
-    	edgenum = 0;
-    	for (int c = 0; c < cols; c++){
-    		if (this->value(v,c) == true){
-    			edgenum++;
-    		}
-    	}
-    	return edgenum;
+        edgenum = 0;
+        for (int c = 0; c < cols; c++){
+            if (this->value(v,c) == true){
+                edgenum++;
+            }
+        }
+        return edgenum;
     }
 
     int num_of_edges(){
@@ -56,9 +56,9 @@ public:
     }
 
     void clear_edges(int v) {
-   		for (int c = 0; c < cols; c++) {
-    		this->edit(v, c, 0);
-    	}
+        for (int c = 0; c < cols; c++) {
+            this->edit(v, c, 0);
+        }
         for (int r = 0; r < rows; r++){
             this->edit(r, v, 0);
         }
@@ -129,78 +129,82 @@ int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_ver
 int main() {
     
     std::string user_input;
-    int result;
-    int num_vert;
-    Matrix edges = Matrix(0, 0, 0);
-    Matrix edges_cpy = Matrix(0, 0, 0);
-    std::vector<int> approx_vc1;
-    std::vector<int> approx_vc2;
-    int most_edges = -1;
-    std::ifstream graphs ("graphs-input.txt");
+    int result, num_vert, most_edges = -1;
+    Matrix edges = Matrix(0, 0, 0), edges_cpy = Matrix(0, 0, 0);
+    std::vector<int> approx_vc1, approx_vc2;
+    std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
+    std::ofstream datafile ("datafile.dat");//to remove when ready to submit
+    //std::vector<double> runtimes;
+    //std::vector<double> ratios;
+
     
     while(true){
         
         if (graphs.is_open()){
-    		getline(graphs, user_input);
-        	if (graphs.eof()) {
-            	break;
-        	}
-    	}
-    	else{
-    		std::cerr << "Error: unable to open file" << std::endl;
-    	}
-    	/*
-    	getline(std::cin, user_input);
+            getline(graphs, user_input);
+            if (graphs.eof()) {
+                break;
+            }
+        }
+        else{
+            std::cerr << "Error: unable to open file" << std::endl;
+        }
+        /* replace the above with the below when ready to submit
+        getline(std::cin, user_input);
         if (std::cin.eof()) {
             break;
         }
         */
         result = parse_input_into_matrix(user_input, edges, num_vert);
+        //if command 'V' or unknown command
         if (result == 1){
             continue;
         }
+        //if command 'E' with no edges
         else if (result == -1){
             std::cout << std::endl;
             continue;
         }
+        //command 'E' or unknown return value?
         else{
-        	//APPROX-VC-1
+            //APPROX-VC-1
             edges_cpy = edges;
-        	while (true) {
-        		most_edges = 0;
-            	for (int v = 0; v < num_vert; v++) {
-            		if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
-            			most_edges = v;
-            		}
-            	}
-            	if (edges_cpy.num_of_edges() == 0){
-            		break;
-            	}
-            	approx_vc1.push_back(most_edges);
+            while (true) {
+                most_edges = 0;
+                for (int v = 0; v < num_vert; v++) {
+                    if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
+                        most_edges = v;
+                    }
+                }
+                if (edges_cpy.num_of_edges() == 0){
+                    break;
+                }
+                approx_vc1.push_back(most_edges);
                 edges_cpy.clear_edges(most_edges);
             }
             vc_output("APPROX-VC-1", approx_vc1);
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 
-    		//APPROX-VC-2
+            //APPROX-VC-2
             edges_cpy = edges;
             for (int r = 0; r < num_vert; r++){
-            	//adds both vertices from the edge to 
-            	for (int c = 0; c < num_vert; c++){
-            		if (edges_cpy.value(r,c) == true) {
-            			approx_vc2.push_back(r);
-            			approx_vc2.push_back(c);
-            			edges_cpy.clear_edges(r);
-            			edges_cpy.clear_edges(c);
-            			break;
-            		}
-            	}
+                //adds both vertices from the edge to 
+                for (int c = 0; c < num_vert; c++){
+                    if (edges_cpy.value(r,c) == true) {
+                        approx_vc2.push_back(r);
+                        approx_vc2.push_back(c);
+                        edges_cpy.clear_edges(r);
+                        edges_cpy.clear_edges(c);
+                        break;
+                    }
+                }
             }
             vc_output("APPROX-VC-2", approx_vc2);
             approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
         }
     }
     graphs.close();
+    datafile.close();
     return 0;
 }

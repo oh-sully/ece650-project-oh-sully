@@ -136,7 +136,7 @@ int main() {
     std::vector<int> approx_vc1;
     std::vector<int> approx_vc2;
     int most_edges = -1;
-    std::ifstream graphs ("graphs_input.txt");
+    std::ifstream graphs ("graphs-input.txt");
     
     while(true){
         
@@ -145,6 +145,9 @@ int main() {
         	if (std::cin.eof()) {
             	break;
         	}
+    	}
+    	else{
+    		std::cerr << "Error: unable to open file" << std::endl;
     	}
     	/*
     	getline(std::cin, user_input);

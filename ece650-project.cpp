@@ -136,7 +136,7 @@ int main() {
     std::vector<int> approx_vc1;
     std::vector<int> approx_vc2;
     int most_edges = -1;
-    ifstream graphs ("graphs_input.txt");
+    std::ifstream graphs ("graphs_input.txt");
     
     while(true){
         

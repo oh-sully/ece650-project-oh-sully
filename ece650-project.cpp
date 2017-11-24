@@ -142,7 +142,7 @@ int main() {
         
         if (graphs.is_open()){
     		getline(graphs, user_input);
-        	if (std::cin.eof()) {
+        	if (graphs.eof()) {
             	break;
         	}
     	}

@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -135,13 +136,22 @@ int main() {
     std::vector<int> approx_vc1;
     std::vector<int> approx_vc2;
     int most_edges = -1;
+    ifstream graphs ("graphs_input.txt");
     
     while(true){
         
-        getline(std::cin, user_input);
+        if (graphs.is_open()){
+    		getline(graphs, user_input);
+        	if (std::cin.eof()) {
+            	break;
+        	}
+    	}
+    	/*
+    	getline(std::cin, user_input);
         if (std::cin.eof()) {
             break;
         }
+        */
         result = parse_input_into_matrix(user_input, edges, num_vert);
         if (result == 1){
             continue;
@@ -165,7 +175,6 @@ int main() {
             	}
             	approx_vc1.push_back(most_edges);
                 edges_cpy.clear_edges(most_edges);
-
             }
             vc_output("APPROX-VC-1", approx_vc1);
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
@@ -189,5 +198,6 @@ int main() {
             approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
         }
     }
+    graphs.close();
     return 0;
 }

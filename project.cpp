@@ -121,6 +121,7 @@ int main() {
     ioArgs.user_input = &user_input;
     ioArgs.edges = &edges;
     ioArgs.num_vert = &num_vert;
+    int create_thread;
 
     create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
     if (create_thread != 0){

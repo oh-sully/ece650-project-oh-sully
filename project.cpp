@@ -92,8 +92,8 @@ void vc_output(std::string algorithm, std::vector<int> vc){
 void* io_thread(void *ioArgs){
 
     std::cout << "Made it in" << std::endl;
-    std::cout << "User input = " << ioArgs->user_input;
-    std::cout << "Num_vert = " << ioArgs->num_vert;
+    std::cout << "User input = " << ioArgs.user_input;
+    std::cout << "Num_vert = " << ioArgs.num_vert;
 
 }
 
@@ -124,7 +124,6 @@ int main() {
     int create_thread;
 
     create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
-    std::cout << "create_thread = " << create_thread << std::endl;
     if (create_thread != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
     }

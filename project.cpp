@@ -95,8 +95,9 @@ struct ioArgsStruct {
     int* num_vert;
 };
 
-void* io_thread(ioArgsStruct *ioArgs){
+void* io_thread(void *args){
 
+    struct ioArgsStruct *ioArgs = args;
     std::cout << "Made it in" << std::endl;
     std::cout << "User input = " << ioArgs->user_input;
     std::cout << "Num_vert = " << ioArgs->num_vert;
@@ -117,7 +118,7 @@ int main() {
     char command;
     std::string edges_str;
     pthread_t io_pid, VC1_pid, VC2_pid;
-    ioArgsStruct ioArgs;
+    struct ioArgsStruct ioArgs;
     ioArgs.user_input = &user_input;
     ioArgs.edges = &edges;
     ioArgs.num_vert = &num_vert;

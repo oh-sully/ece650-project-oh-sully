@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <pthread.h>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -87,18 +88,27 @@ void vc_output(std::string algorithm, std::vector<int> vc){
         }
     }
 }
+/
+class ioArgsClass {
+public:
+    std::string &user_input;
+    Matrix &edges;
+    int &num_vert;
+    int &result;
+    ifstream graphs;
+}
 
-int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_vert){
+int parse_input_into_matrix(ioArgsClass ioArgs){
     
     int vert1;
     int vert2;
     char command;
     std::string edges_str;
-    std::istringstream iss(user_input);
+    std::istringstream iss(ioArgs.user_input);
     iss >> command;    
     if (command == 'V') {
         iss >> num_vert;
-        edges = Matrix(num_vert, num_vert, 0);
+        ioArgs.edges = Matrix(ioArgs.num_vert, ioArgs.num_vert, 0);
         return 1;
     }
     else if (command == 'E'){
@@ -118,28 +128,65 @@ int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_ver
             isss >> check_str;
             isss >> vert2;
             isss >> check_str;
-            edges.edit(vert1, vert2, true);
-            edges.edit(vert2, vert1, true);
+            ioArgs.edges.edit(vert1, vert2, true);
+            ioArgs.edges.edit(vert2, vert1, true);
         }
         return 0;
     }
     return 1;
 }
+
+void* io_thread(ioArgsClass ioArgs){
+
+    ioArgs.result = 2;
+
+    while(result != 0){
+
+        if (ioArgs.graphs.is_open()){
+            getline(ioArgs.graphs, ioArgs.user_input);
+            if (graphs.eof()) {
+                result = -2;
+                break;
+            }
+        }
+        else{
+            std::cerr << "Error: unable to open file" << std::endl;
+        }
+        /* replace the above with the below when ready to submit
+        getline(std::cin, ioArgs.user_input);
+        if (std::cin.eof()) {
+            break;
+        }
+        */
+        result = parse_input_into_matrix(ioArgs);
+        if (result == 2){
+            std::cerr << "Error: result failed" << std::endl;
+            break;
+        }
+    }
+
+}
     
 int main() {
     
     std::string user_input;
-    int result, num_vert, most_edges = -1;
-    Matrix edges = Matrix(0, 0, 0), edges_cpy = Matrix(0, 0, 0);
+    int result = 2, num_vert, most_edges = -1, create_thread;
+    Matrix edges = Matrix(0, 0, 0), edges_cpy1 = Matrix(0, 0, 0), edges_cpy2 = Matrix(0, 0, 0);
     std::vector<int> approx_vc1, approx_vc2;
     std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("datafile.dat");//to remove when ready to submit
-    //std::vector<double> runtimes;
-    //std::vector<double> ratios;
+    pthread_t io_pid, VC1_pid, VC2_pid;
+
+    ioArgsClass ioArgs;
+    ioArgs.num_vert = num_vert;
+    ioArgs.edges = edges;
+    ioArgs.user_input = user_input;
+    ioArgs.graphs = graphs;
+
 
     
-    while(true){
-        
+    while(result != -2){
+        /*
         if (graphs.is_open()){
             getline(graphs, user_input);
             if (graphs.eof()) {
@@ -154,10 +201,21 @@ int main() {
         if (std::cin.eof()) {
             break;
         }
-        */
+        * /
         result = parse_input_into_matrix(user_input, edges, num_vert);
+        */
         //if command 'V' or unknown command
-        if (result == 1){
+
+        create_thread = pthread_create(&io_pid, NULL, io_thread, ioArgs);
+        if (create_thread != 0){
+            std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
+        }
+        pthread_join(io_pid, NULL);
+
+        if (result == -2 || result == 2){
+            break;
+        }
+        else if (result == 1){ //if command 'V'
             continue;
         }
         //if command 'E' with no edges
@@ -168,34 +226,34 @@ int main() {
         //command 'E' or unknown return value?
         else{
             //APPROX-VC-1
-            edges_cpy = edges;
+            edges_cpy1 = edges;
             while (true) {
                 most_edges = 0;
                 for (int v = 0; v < num_vert; v++) {
-                    if (edges_cpy.num_of_edges(v) > edges_cpy.num_of_edges(most_edges)) {
+                    if (edges_cpy1.num_of_edges(v) > edges_cpy1.num_of_edges(most_edges)) {
                         most_edges = v;
                     }
                 }
-                if (edges_cpy.num_of_edges() == 0){
+                if (edges_cpy1.num_of_edges() == 0){
                     break;
                 }
                 approx_vc1.push_back(most_edges);
-                edges_cpy.clear_edges(most_edges);
+                edges_cpy1.clear_edges(most_edges);
             }
             vc_output("APPROX-VC-1", approx_vc1);
             approx_vc1.erase(approx_vc1.begin(), approx_vc1.end());
 
 
             //APPROX-VC-2
-            edges_cpy = edges;
+            edges_cpy2 = edges;
             for (int r = 0; r < num_vert; r++){
                 //adds both vertices from the edge to 
                 for (int c = 0; c < num_vert; c++){
-                    if (edges_cpy.value(r,c) == true) {
+                    if (edges_cpy2.value(r,c) == true) {
                         approx_vc2.push_back(r);
                         approx_vc2.push_back(c);
-                        edges_cpy.clear_edges(r);
-                        edges_cpy.clear_edges(c);
+                        edges_cpy2.clear_edges(r);
+                        edges_cpy2.clear_edges(c);
                         break;
                     }
                 }

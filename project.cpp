@@ -89,58 +89,44 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
-int parse_input_into_matrix(std::string &user_input, Matrix &edges, int &num_vert){
-    
-    int vert1;
-    int vert2;
-    char command;
-    std::string edges_str;
-    std::istringstream iss(user_input);
-    iss >> command;    
-    if (command == 'V') {
-        iss >> num_vert;
-        edges = Matrix(num_vert, num_vert, 0);
-        return 1;
-    }
-    else if (command == 'E'){
-        iss >> edges_str;
-        ReplaceStringInPlace(edges_str, "{<", "{< ");
-        ReplaceStringInPlace(edges_str, ",", " , ");
-        ReplaceStringInPlace(edges_str, "> , <", " >,< ");
-        ReplaceStringInPlace(edges_str, ">}", " >}");
-        std::istringstream isss(edges_str);
-        std::string check_str;
-        isss >> check_str;
-        if (check_str == "{" || check_str == "{ " || check_str == "{}" || check_str == "{ }"){
-            return -1;
-        }
-        while (check_str != ">}") {
-            isss >> vert1;
-            isss >> check_str;
-            isss >> vert2;
-            isss >> check_str;
-            edges.edit(vert1, vert2, true);
-            edges.edit(vert2, vert1, true);
-        }
-        return 0;
-    }
-    return 1;
+void* io_thread(void *ioArgs){
+
+    std::cout << "Made it in" << std::endl;
+    std::cout << "User input = " << ioArgs->user_input;
+    std::cout << "Num_vert = " << ioArgs->num_vert;
+
 }
+
+struct ioArgsStruct {
+    std::string* user_input;
+    Matrix* edges;
+    int* num_vert;
+};
     
 int main() {
     
-    std::string user_input;
-    int result, num_vert, most_edges = -1;
+    std::string user_input = "V 0";
+    std::string throwawaystorage;
+    int result, num_vert = 0, most_edges = -1;
     Matrix edges = Matrix(0, 0, 0), edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1, approx_vc2;
-    std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
+    //std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("datafile.dat");//to remove when ready to submit
-    //std::vector<double> runtimes;
-    //std::vector<double> ratios;
     int vert1;
     int vert2;
     char command;
     std::string edges_str;
+    pthread_t io_pid, VC1_pid, VC2_pid;
+    ioArgsStruct ioArgs;
+    ioArgs.user_input = &user_input;
+    ioArgs.edges = &edges;
+    ioArgs.num_vert = &num_vert;
+
+    create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
+    if (create_thread != 0){
+        std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
+    }
+    pthread_join(io_pid, NULL);
     
     while(true){
         

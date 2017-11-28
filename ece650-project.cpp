@@ -32,7 +32,7 @@ public:
     int value(int n, int k) {
         return this->matrix[cols * n + k];
     }
-
+    //returns the number of edges with vertex 'v'
     int num_of_edges(int v){
         edgenum = 0;
         for (int c = 0; c < cols; c++){
@@ -42,7 +42,7 @@ public:
         }
         return edgenum;
     }
-
+    //returns the total number of edges
     int num_of_edges(){
         for (int r = 0; r < rows; r++){
             for (int c = 0; c < cols; c++){

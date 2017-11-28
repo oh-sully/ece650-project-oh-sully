@@ -88,7 +88,7 @@ void vc_output(std::string algorithm, std::vector<int> vc){
         }
     }
 }
-/
+
 class ioArgsClass {
 public:
     std::string &user_input;
@@ -96,7 +96,7 @@ public:
     int &num_vert;
     int &result;
     ifstream graphs;
-}
+};
 
 int parse_input_into_matrix(ioArgsClass ioArgs){
     

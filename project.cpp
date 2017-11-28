@@ -89,11 +89,11 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
-void* io_thread(void *ioArgs){
+void* io_thread(ioArgsStruct *ioArgs){
 
     std::cout << "Made it in" << std::endl;
-    std::cout << "User input = " << ioArgs.user_input;
-    std::cout << "Num_vert = " << ioArgs.num_vert;
+    std::cout << "User input = " << ioArgs->user_input;
+    std::cout << "Num_vert = " << ioArgs->num_vert;
 
 }
 

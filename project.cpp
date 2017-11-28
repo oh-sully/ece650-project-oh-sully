@@ -97,7 +97,7 @@ struct ioArgsStruct {
 
 void* io_thread(void *args){
 
-    struct ioArgsStruct *ioArgs = args;
+    ioArgsStruct *ioArgs = args;
     std::cout << "Made it in" << std::endl;
     std::cout << "User input = " << ioArgs->user_input;
     std::cout << "Num_vert = " << ioArgs->num_vert;

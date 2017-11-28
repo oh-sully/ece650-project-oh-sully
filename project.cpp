@@ -110,7 +110,7 @@ int main() {
     int result, num_vert = 0, most_edges = -1;
     Matrix edges = Matrix(0, 0, 0), edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1, approx_vc2;
-    //std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
+    std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("datafile.dat");//to remove when ready to submit
     int vert1;
     int vert2;

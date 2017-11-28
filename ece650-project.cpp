@@ -107,7 +107,7 @@ int parse_input_into_matrix(ioArgsClass ioArgs){
     std::istringstream iss(ioArgs.user_input);
     iss >> command;    
     if (command == 'V') {
-        iss >> num_vert;
+        iss >> ioArgs.num_vert;
         ioArgs.edges = Matrix(ioArgs.num_vert, ioArgs.num_vert, 0);
         return 1;
     }
@@ -145,7 +145,7 @@ void* io_thread(ioArgsClass ioArgs){
         if (ioArgs.graphs.is_open()){
             getline(ioArgs.graphs, ioArgs.user_input);
             if (graphs.eof()) {
-                result = -2;
+                ioArgs.result = -2;
                 break;
             }
         }
@@ -158,8 +158,8 @@ void* io_thread(ioArgsClass ioArgs){
             break;
         }
         */
-        result = parse_input_into_matrix(ioArgs);
-        if (result == 2){
+        ioArgs.result = parse_input_into_matrix(ioArgs);
+        if (ioArgs.result == 2){
             std::cerr << "Error: result failed" << std::endl;
             break;
         }

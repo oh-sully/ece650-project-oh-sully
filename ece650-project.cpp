@@ -95,7 +95,6 @@ public:
     Matrix &edges;
     int &num_vert;
     int &result;
-    ifstream graphs;
 };
 
 int parse_input_into_matrix(ioArgsClass ioArgs){
@@ -140,10 +139,10 @@ void* io_thread(ioArgsClass ioArgs){
 
     ioArgs.result = 2;
 
-    while(result != 0){
+    while(ioArgs.result != 0){
 
-        if (ioArgs.graphs.is_open()){
-            getline(ioArgs.graphs, ioArgs.user_input);
+        if (graphs.is_open()){
+            getline(graphs, ioArgs.user_input);
             if (graphs.eof()) {
                 ioArgs.result = -2;
                 break;

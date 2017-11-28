@@ -89,6 +89,12 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
+struct ioArgsStruct {
+    std::string* user_input;
+    Matrix* edges;
+    int* num_vert;
+};
+
 void* io_thread(ioArgsStruct *ioArgs){
 
     std::cout << "Made it in" << std::endl;
@@ -96,12 +102,6 @@ void* io_thread(ioArgsStruct *ioArgs){
     std::cout << "Num_vert = " << ioArgs->num_vert;
 
 }
-
-struct ioArgsStruct {
-    std::string* user_input;
-    Matrix* edges;
-    int* num_vert;
-};
     
 int main() {
     

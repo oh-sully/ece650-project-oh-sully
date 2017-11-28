@@ -124,6 +124,7 @@ int main() {
     int create_thread;
 
     create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
+    std::cout << "create_thread = " << create_thread << std::endl;
     if (create_thread != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
     }

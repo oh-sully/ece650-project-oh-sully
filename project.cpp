@@ -95,13 +95,15 @@ struct ioArgsStruct {
     int* num_vert;
 };
 
-void* io_thread(void *args){
+void *io_thread(void *args){
 
-    ioArgsStruct *ioArgs = args;
+    struct ioArgsStruct *ioArgs;
+    ioArgs = (struct ioArgsStruct *) args;
     std::cout << "Made it in" << std::endl;
-    std::cout << "User input = " << ioArgs->user_input;
-    std::cout << "Num_vert = " << ioArgs->num_vert;
+    std::cout << "User input = " << ioArgs->user_input << std::endl;
+    std::cout << "Num_vert = " << ioArgs->num_vert <<std::endl;
 
+    pthread_exit(NULL);
 }
     
 int main() {
@@ -117,6 +119,7 @@ int main() {
     int vert2;
     char command;
     std::string edges_str;
+
     pthread_t io_pid, VC1_pid, VC2_pid;
     struct ioArgsStruct ioArgs;
     ioArgs.user_input = &user_input;
@@ -124,7 +127,7 @@ int main() {
     ioArgs.num_vert = &num_vert;
     int create_thread;
 
-    create_thread = pthread_create(&io_pid, NULL, io_thread, &ioArgs);
+    create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
     if (create_thread != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
     }

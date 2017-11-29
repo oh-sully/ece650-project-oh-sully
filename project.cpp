@@ -20,6 +20,12 @@ private:
 public:
     std::vector<bool> matrix;
 
+    Matrix() {
+        rows = 0;
+        cols = 0;
+        matrix.resize(0, 0);
+    }
+
     Matrix(int n, int k, bool str_value) {
         rows = n;
         cols = k;
@@ -90,9 +96,9 @@ void vc_output(std::string algorithm, std::vector<int> vc){
 }
 
 struct ioArgsStruct {
-    std::string* user_input;
-    Matrix* edges;
-    int* num_vert;
+    std::string user_input;
+    Matrix edges;
+    int num_vert;
 };
 
 void *io_thread(void *args){
@@ -108,23 +114,24 @@ void *io_thread(void *args){
     
 int main() {
     
+    int count = 0; //to delete
     std::string user_input = "V 0";
-    std::string throwawaystorage;
+    //std::string throwawaystorage;
     int result, num_vert = 0, most_edges = -1;
     Matrix edges = Matrix(0, 0, 0), edges_cpy = Matrix(0, 0, 0);
     std::vector<int> approx_vc1, approx_vc2;
     std::ifstream graphs ("graphs-input.txt"); //to remove when ready to submit
-    std::ofstream datafile ("datafile.dat");//to remove when ready to submit
+    //std::ofstream datafile ("datafile.dat");//to remove when ready to submit
     int vert1;
     int vert2;
     char command;
     std::string edges_str;
-
+    /*
     pthread_t io_pid, VC1_pid, VC2_pid;
     struct ioArgsStruct ioArgs;
-    ioArgs.user_input = &user_input;
-    ioArgs.edges = &edges;
-    ioArgs.num_vert = &num_vert;
+    ioArgs.user_input = user_input;
+    ioArgs.edges = edges;
+    ioArgs.num_vert = num_vert;
     int create_thread;
 
     create_thread = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
@@ -132,7 +139,7 @@ int main() {
         std::cerr << "Error: Couldn't create io thread; error #" << create_thread << std::endl;
     }
     pthread_join(io_pid, NULL);
-    
+    */
     while(true){
         
         if (graphs.is_open()){
@@ -155,6 +162,10 @@ int main() {
         if (command == 'V') {
             iss >> num_vert;
             edges = Matrix(num_vert, num_vert, 0);
+            count++;
+            if (count == 10){
+                break;
+            }
             continue;
         }
         else if (command == 'E'){
@@ -168,6 +179,9 @@ int main() {
             isss >> check_str;
             if (check_str == "{" || check_str == "{ " || check_str == "{}" || check_str == "{ }"){
                 std::cout << std::endl;
+                if (count == 10){
+                    break;
+                }
                 continue;
             }
             while (check_str != ">}") {
@@ -216,8 +230,12 @@ int main() {
             approx_vc2.erase(approx_vc2.begin(), approx_vc2.end());
             
         }
+        count++;
+        if (count == 10){
+            break;
+        }
     }
     graphs.close();
-    datafile.close();
+    //datafile.close();
     return 0;
 }

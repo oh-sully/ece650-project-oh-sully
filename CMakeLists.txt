@@ -11,3 +11,4 @@ set (CMAKE_CXX_FLAGS "-std=c++11 -Wall -pthread ${CMAKE_CXX_FLAGS}")
 ## add additional .cpp files if needed
 #add_executable(ece650-project ece650-project.cpp)
 add_executable(project project.cpp)
+add_executable(working Prethreads_version.cpp)

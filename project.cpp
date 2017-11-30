@@ -433,15 +433,18 @@ void *io_thread(void *args){
         VC1Args.user_input = ioArgs->user_input;
         VC1Args.edges = ioArgs->edges;
         VC1Args.num_vert = ioArgs->num_vert;
+        VC1Args.vc_list = ioArgs->vc_list;
 
         VC2Args.user_input = ioArgs->user_input;
         VC2Args.edges = ioArgs->edges;
         VC2Args.num_vert = ioArgs->num_vert;
+        VC2Args.vc_list = ioArgs->vc_list;
 
         VCSATArgs.user_input = ioArgs->user_input;
         VCSATArgs.edges = ioArgs->edges;
         VCSATArgs.num_vert = ioArgs->num_vert;
         VCSATArgs.num_edges = ioArgs->num_edges;
+        VCSATArgs.vc_list = ioArgs->vc_list;
 
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
@@ -492,6 +495,7 @@ int main() {
     std::string user_input = "V 0";
     int num_vert = 0;
     Matrix edges = Matrix(0, 0, 0);
+    std::vector vc_list;
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;

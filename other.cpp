@@ -22,65 +22,73 @@ static void pclock(char *msg, clockid_t cid){
 
 
 //stores the information for the vertices relationships (e.g. the edges)
-Matrix::Matrix(){
-    rows = 0;
-    cols = 0;
-    matrix.resize(0, 0);
-}
+class Matrix {
+private:
+    int rows = 0, cols = 0, edgenum = 0;
+public:
+    std::vector<bool> matrix;
 
-Matrix::Matrix(int n, int k, bool str_value) {
-    rows = n;
-    cols = k;
-    matrix.resize(rows * cols, str_value);
-}
-
-void Matrix::edit(int n, int k, bool value) {
-    this->matrix[cols * n + k] = value;
-}
-
-int Matrix::value(int n, int k) {
-    return this->matrix[cols * n + k];
-}
-
-int Matrix::num_of_edges(int v){
-    edgenum = 0;
-    for (int c = 0; c < cols; c++){
-        if (this->value(v,c) == true){
-            edgenum++;
-        }
+    Matrix() {
+        rows = 0;
+        cols = 0;
+        matrix.resize(0, 0);
     }
-    return edgenum;
-}
 
-int Matrix::num_of_edges(){
-    for (int r = 0; r < rows; r++){
+    Matrix(int n, int k, bool str_value) {
+        rows = n;
+        cols = k;
+        matrix.resize(rows * cols, str_value);
+    }
+    
+    void edit(int n, int k, bool value) {
+        this->matrix[cols * n + k] = value;
+    }
+    
+    int value(int n, int k) {
+        return this->matrix[cols * n + k];
+    }
+    //returns the number of edges with vertex 'v'
+    int num_of_edges(int v){
+        edgenum = 0;
         for (int c = 0; c < cols; c++){
-            if (this->value(r,c) == true){
+            if (this->value(v,c) == true){
                 edgenum++;
             }
         }
+        return edgenum;
     }
-    edgenum = edgenum / 2;
-    return edgenum;
-}
-
-void Matrix::clear_edges(int v) {
-    for (int c = 0; c < cols; c++) {
-        this->edit(v, c, 0);
-    }
-    for (int r = 0; r < rows; r++){
-        this->edit(r, v, 0);
-    }
-}
-
-void Matrix::print() {        
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < cols; c++){
-            std::cout << this->value(r,c) << "  ";
+    //returns the total number of edges
+    int num_of_edges(){
+        for (int r = 0; r < rows; r++){
+            for (int c = 0; c < cols; c++){
+                if (this->value(r,c) == true){
+                    edgenum++;
+                }
+            }
         }
-        std::cout << std::endl;
+        edgenum = edgenum / 2;
+        return edgenum;
     }
-}
+    //sets to 0 all edges that contain vertex 'v'
+    void clear_edges(int v) {
+        for (int c = 0; c < cols; c++) {
+            this->edit(v, c, 0);
+        }
+        for (int r = 0; r < rows; r++){
+            this->edit(r, v, 0);
+        }
+    }
+   //prints the adjacency matrix
+    void print() {        
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++){
+                std::cout << this->value(r,c) << "  ";
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+
 
 //outputs "PROGRAM_NAME: # # # # # #"
 void vc_output(std::string algorithm, std::vector<int> vc){
@@ -97,8 +105,18 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
+
+//Struct for passing arguments to the threads
+struct ArgsStruct {
+    std::string user_input;
+    Matrix edges;
+    int num_vert, num_edges;
+    std::vector<int> vc_list;
+};
+
+
 //thread for VC1 algorithm
-void* VC1_thread(void *args){
+void *VC1_thread(void *args){
     struct ArgsStruct *VC1Args;
     VC1Args = (struct ArgsStruct *) args;
     int most_edges;
@@ -325,7 +343,6 @@ void *VCSAT_thread(void *args){
 
     pthread_exit(NULL);
 }
-
 
 //thread for io
 void *io_thread(void *args){

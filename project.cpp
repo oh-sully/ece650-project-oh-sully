@@ -23,6 +23,8 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
     }
 }
 
+
+//prints msg and the cpu time
 static void pclock(char *msg, clockid_t cid){
     struct timespec ts;
 
@@ -33,6 +35,8 @@ static void pclock(char *msg, clockid_t cid){
     printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
 }
 
+
+//stores the information for the vertices relationships (e.g. the edges)
 class Matrix {
 private:
     int rows = 0, cols = 0, edgenum = 0;
@@ -80,7 +84,7 @@ public:
         edgenum = edgenum / 2;
         return edgenum;
     }
-
+    //sets to 0 all edges that contain vertex 'v'
     void clear_edges(int v) {
         for (int c = 0; c < cols; c++) {
             this->edit(v, c, 0);
@@ -89,7 +93,7 @@ public:
             this->edit(r, v, 0);
         }
     }
-   
+   //prints the adjacency matrix
     void print() {        
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++){
@@ -100,6 +104,8 @@ public:
     }
 };
 
+
+//outputs "PROGRAM_NAME: # # # # # #"
 void vc_output(std::string algorithm, std::vector<int> vc){
     std::sort(vc.begin(), vc.end());
     std::cout << algorithm << ": ";
@@ -114,6 +120,8 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
+
+//Struct for passing arguments to the threads
 struct ArgsStruct {
     std::string user_input;
     Matrix edges;
@@ -121,6 +129,8 @@ struct ArgsStruct {
     std::vector<int> vc_list;
 };
 
+
+//thread for VC1 algorithm
 void *VC1_thread(void *args){
     struct ArgsStruct *VC1Args;
     VC1Args = (struct ArgsStruct *) args;
@@ -158,6 +168,8 @@ void *VC1_thread(void *args){
     pthread_exit(NULL);
 }
 
+
+//Thread for VC2 algorithm
 void *VC2_thread(void *args){
     struct ArgsStruct *VC2Args;
     VC2Args = (struct ArgsStruct *) args;
@@ -194,6 +206,8 @@ void *VC2_thread(void *args){
     pthread_exit(NULL);
 }
 
+
+//Thread for VCSAT algorithm(a4)
 void *VCSAT_thread(void *args){
     struct ArgsStruct *VCSATArgs;
     VCSATArgs = (struct ArgsStruct *) args;
@@ -206,6 +220,7 @@ void *VCSAT_thread(void *args){
     Minisat::vec<Minisat::Lit> lits;
     Minisat::vec<Minisat::Lit> clause;
 
+    //if VCSATArgs only has one edge, either vertex is a correct vertex cover
     //if (VCSATArgs->num_edges == 1){
     //    VCSATArgs->vc_list.push_back(vert1) //but figure out proper implimentation since vert1 isn't in scope
     //    continue;
@@ -213,7 +228,7 @@ void *VCSAT_thread(void *args){
     
     up_k = VCSATArgs->num_vert;
     low_k = 1;
-    k = (up_k - low_k) / 2 + low_k - 1; //Int division, if num_vert is odd, then k is num_vert/2 - 0.5
+    k = (up_k - low_k) / 2 + low_k - 1; //Int division, if num_vert is odd, then division is num_vert/2 - 0.5
     if (k == 1){
         k = 2;
     }
@@ -274,15 +289,15 @@ void *VCSAT_thread(void *args){
 
         //binary search; changing k depending on whether k was satisfiable or not
         if (sat == 1){
-
+            //if sat, make sure previous vc_list is of size 'k' filled with '-1's
             VCSATArgs->vc_list.resize(0);
             VCSATArgs->vc_list.resize(k, -1);
 
-            for (int c = 0, i = 0; c < k; c++){
+            for (int c = 0; c < k; c++){
                 for (int n = 0; n < VCSATArgs->num_vert; n++){
+                    //if true, add vertex 'n' to the vertex cover
                     if (solver->modelValue(lits[n*k+c]) == Minisat::l_True){
-                        VCSATArgs->vc_list[i] = n;
-                        ++i;
+                        VCSATArgs->vc_list.push_back(n);
                     }
                     else if (solver->modelValue(lits[n*k+c]) == Minisat::l_False){
                         continue;
@@ -296,19 +311,23 @@ void *VCSAT_thread(void *args){
             if (up_k == k || low_k == k){
                 break;
             }
-            up_k = k;
-            k = (up_k - low_k) / 2 + low_k; //Int division
+            else{
+                up_k = k;
+                k = (up_k - low_k) / 2 + low_k; //Int division
+            }
         }
         else if (sat == 0){
            //if we reached the end of the binary search, break out of while loop
             if (up_k == k || low_k == k){
                 break;
             }
-            low_k = k;
-            k = (up_k - low_k) / 2 + low_k;
+            else{
+                low_k = k;
+                k = (up_k - low_k) / 2 + low_k;
+            }
         }
     } //end of reduction/binary search
-
+    //if no sat conditions were found for any 'k' attempted, set vertex cover to all vertices
     if (sat_flag == 0){
         VCSATArgs->vc_list.resize(0);
         VCSATArgs->vc_list.resize(VCSATArgs->num_vert);
@@ -316,8 +335,9 @@ void *VCSAT_thread(void *args){
             VCSATArgs->vc_list[j] = j;
         }
     }
-
+    //print outout
     vc_output("CNF-SAT-VC", VCSATArgs->vc_list);
+    //clear vectors and reset solver
     while(lits.size() > 0){
         lits.pop();
     }
@@ -336,11 +356,11 @@ void *VCSAT_thread(void *args){
         pclock("VCSAT CPU Time:   ", cid);
     }
 
-
     pthread_exit(NULL);
-
 }
 
+
+//thread for io
 void *io_thread(void *args){
 
     struct ArgsStruct *ioArgs;
@@ -349,7 +369,7 @@ void *io_thread(void *args){
     //std::ofstream datafile ("datafile.dat");//to remove when ready to submit
     int vert1, vert2, num_edges = 0, cpulockid;
     char command;
-    std::string edges_str;
+    std::string edges_str, check_str;
 
     pthread_t VCSAT_pid, VC1_pid, VC2_pid;
     struct ArgsStruct VCSATArgs, VC1Args, VC2Args;
@@ -357,8 +377,8 @@ void *io_thread(void *args){
 
     //clockid_t VCSAT_cid, VC1_cid, VC2_cid;
     //struct timespec ts;
-    std::vector<double> CPUtimes;
-    std::vector< std::vector<double> > stddev; //[algorithm][vertex]
+    //std::vector<double> CPUtimes;
+    //std::vector< std::vector<double> > stddev; //[algorithm][vertex]
 
     while(true){
         
@@ -386,17 +406,20 @@ void *io_thread(void *args){
         }
         else if (command == 'E'){
             iss >> edges_str;
+            //edges_str is {<#,#>,<#,#>,<#,#>}
             ReplaceStringInPlace(edges_str, "{<", "{< ");
             ReplaceStringInPlace(edges_str, ",", " , ");
             ReplaceStringInPlace(edges_str, "> , <", " >,< ");
             ReplaceStringInPlace(edges_str, ">}", " >}");
+            //edges_str is now {< # , # >,< # , # >,< # , # >}
             std::istringstream isss(edges_str);
-            std::string check_str;
             isss >> check_str;
+            //if no edges print a blank line
             if (check_str == "{}" || check_str == "{ }"){
                 std::cout << std::endl;
                 continue;
             }
+            //while you haven't found '>}' aka then end of the input, add the edges to the matrix
             while (check_str != ">}") {
                 isss >> vert1;
                 isss >> check_str;
@@ -407,19 +430,22 @@ void *io_thread(void *args){
                 ioArgs->num_edges++;
             }
         }
-
+        //sets the arguments for the threads in their respective structs
         VC1Args.user_input = ioArgs->user_input;
         VC1Args.edges = ioArgs->edges;
         VC1Args.num_vert = ioArgs->num_vert;
+
         VC2Args.user_input = ioArgs->user_input;
         VC2Args.edges = ioArgs->edges;
         VC2Args.num_vert = ioArgs->num_vert;
+
         VCSATArgs.user_input = ioArgs->user_input;
         VCSATArgs.edges = ioArgs->edges;
         VCSATArgs.num_vert = ioArgs->num_vert;
         VCSATArgs.num_edges = ioArgs->num_edges;
 
-        for (int run_number = 0; run_number < 10; run_number++){
+        //set range to run_number < 10 when you want the 10 runs
+        for (int run_number = 0; run_number < 1; run_number++){
             
             create_VCSAT = pthread_create(&VCSAT_pid, NULL, VCSAT_thread, (void *)&VCSATArgs);
             if (create_VCSAT != 0){
@@ -459,7 +485,9 @@ void *io_thread(void *args){
 
     pthread_exit(NULL);
 }
-    
+
+
+//main function, duh    
 int main() {
     
     std::string user_input = "V 0";

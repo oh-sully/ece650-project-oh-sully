@@ -1,4 +1,4 @@
-#include "other.h"
+#include "other.hpp"
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;

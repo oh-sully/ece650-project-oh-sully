@@ -1,4 +1,4 @@
-#include "other.h"
+#include "other.hpp"
 /*
 #include <iostream>
 #include <string>
@@ -398,7 +398,6 @@ void *io_thread(void *args){
         //if (std::cin.eof()) {
         //    break;
         //}
-        
         std::istringstream iss(ioArgs->user_input);
         iss >> command;    
         if (command == 'V') {
@@ -487,8 +486,8 @@ void *io_thread(void *args){
 
     pthread_exit(NULL);
 }
-*/
 
+*/
 //main function, duh    
 int main() {
     

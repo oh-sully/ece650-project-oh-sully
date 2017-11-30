@@ -171,12 +171,12 @@ void *VCSAT_thread(void *args){
     Minisat::vec<Minisat::Lit> lits;
     Minisat::vec<Minisat::Lit> clause;
 
-    //if (VCSAT->num_edges == 1){
-    //    VCSAT->vc_list.push_back(vert1) //but figure out proper implimentation since vert1 isn't in scope
+    //if (VCSATArgs->num_edges == 1){
+    //    VCSATArgs->vc_list.push_back(vert1) //but figure out proper implimentation since vert1 isn't in scope
     //    continue;
     //}
     
-    up_k = VCSAT->num_vert;
+    up_k = VCSATArgs->num_vert;
     low_k = 1;
     k = (up_k - low_k) / 2 + low_k - 1; //Int division, if num_vert is odd, then k is num_vert/2 - 0.5
     if (k == 1){
@@ -185,12 +185,12 @@ void *VCSAT_thread(void *args){
     while(true){
 
         //creates num_vert positive literals for each i in [1,k] (lits.size() = VCSAT->num_vert*k)
-        for(int x = 0; x < VCSAT->num_vert * k; x++){
+        for(int x = 0; x < VCSATArgs->num_vert * k; x++){
             lits.push(Minisat::mkLit(solver->newVar()));
         }
         // Adds the clauses for contraint 1
         for (int c = 0; c < k; c++){
-            for (int n = 0; n < VCSAT->num_vert; n++){
+            for (int n = 0; n < VCSATArgs->num_vert; n++){
                 clause.push(lits[n*k + c]);
             }
             //std::cout << std::endl;
@@ -201,7 +201,7 @@ void *VCSAT_thread(void *args){
         }
         // Adds the clauses for contraint 2
         // No vertex can appear twice in a vertex cover (!clause[0] || !clause[1])
-        for (int n = 0; n < VCSAT->num_vert; n++){
+        for (int n = 0; n < VCSATArgs->num_vert; n++){
             for (int c = 0; c < (k-1); c++){
                 for (int i = c+1; i < k; i++){
                     solver->addClause(~lits[n*k + c], ~lits[n*k + i]);
@@ -211,18 +211,18 @@ void *VCSAT_thread(void *args){
         // Adds the clauses for contraint 3
         // No more than one vertex appears in the same position in a vertex cover (!clause[0] || !clause[1])
         for (int c = 0; c < k; c++){
-            for (int n = 0; n < (VCSAT->num_vert-1); n++){
-                for (int i = n+1; i < VCSAT->num_vert; i++){
+            for (int n = 0; n < (VCSATArgs->num_vert-1); n++){
+                for (int i = n+1; i < VCSATArgs->num_vert; i++){
                     solver->addClause(~lits[n*k + c], ~lits[i*k + c]);
                 }
             }
         }
         // Adds the clauses for contraint 4
         // Adds edges contraints; At least one vertex in every edge must be in the vertex cover
-        for (int row = 0; row < (VCSAT->num_vert - 1); row++){
-            for (int col = (row + 1); col < VCSAT->num_vert; col++){ //skips comparing the same vertex
+        for (int row = 0; row < (VCSATArgs->num_vert - 1); row++){
+            for (int col = (row + 1); col < VCSATArgs->num_vert; col++){ //skips comparing the same vertex
                 
-                if (VCSAT->edges.value(row,col) == true){
+                if (VCSATArgs->edges.value(row,col) == true){
                     for (int c = 0; c < k; c++){
                         clause.push(lits[row*k + c]);
                         clause.push(lits[col*k + c]);
@@ -240,13 +240,13 @@ void *VCSAT_thread(void *args){
         //binary search; changing k depending on whether k was satisfiable or not
         if (sat == 1){
 
-            VCSAT->vc_list.resize(0);
-            VCSAT->vc_list.resize(k, -1);
+            VCSATArgs->vc_list.resize(0);
+            VCSATArgs->vc_list.resize(k, -1);
 
             for (int c = 0, i = 0; c < k; c++){
-                for (int n = 0; n < VCSAT->num_vert; n++){
+                for (int n = 0; n < VCSATArgs->num_vert; n++){
                     if (solver->modelValue(lits[n*k+c]) == Minisat::l_True){
-                        VCSAT->vc_list[i] = n;
+                        VCSATArgs->vc_list[i] = n;
                         ++i;
                     }
                     else if (solver->modelValue(lits[n*k+c]) == Minisat::l_False){
@@ -275,10 +275,10 @@ void *VCSAT_thread(void *args){
     } //end of reduction/binary search
 
     if (sat_flag == 0){
-        VCSAT->vc_list.resize(0);
-        VCSAT->vc_list.resize(VCSAT->num_vert);
-        for (int j = 0; j < VCSAT->num_vert; j++){
-            VCSAT->vc_list[j] = j;
+        VCSATArgs->vc_list.resize(0);
+        VCSATArgs->vc_list.resize(VCSATArgs->num_vert);
+        for (int j = 0; j < VCSATArgs->num_vert; j++){
+            VCSATArgs->vc_list[j] = j;
         }
     }
 

@@ -495,7 +495,7 @@ int main() {
     std::string user_input = "V 0";
     int num_vert = 0;
     Matrix edges = Matrix(0, 0, 0);
-    std::vector vc_list;
+    std::vector<int> vc_list;
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;

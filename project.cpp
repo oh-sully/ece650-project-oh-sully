@@ -23,6 +23,16 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
     }
 }
 
+static void pclock(char *msg, clockid_t cid){
+    struct timespec ts;
+
+    printf("%s", msg);
+    if (clock_gettime(cid, &ts) == -1){
+        std::cout << "Error with gettime" << std::endl;
+    }
+    printf("%4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+}
+
 class Matrix {
 private:
     int rows = 0, cols = 0, edgenum = 0;
@@ -294,16 +304,6 @@ void *VCSAT_thread(void *args){
 
 void *io_thread(void *args){
 
-    static void pclock(char *msg, clockid_t cid){
-        struct timespec ts;
-
-        printf("%s", msg);
-        if (clock_gettime(cid, &ts) == -1){
-            std::cout << "Error with gettime" << std::endl;
-        }
-        printf("%4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-    }
-
     struct ArgsStruct *ioArgs;
     ioArgs = (struct ArgsStruct *) args;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
@@ -380,7 +380,7 @@ void *io_thread(void *args){
         VCSATArgs.num_vert = ioArgs->num_vert;
         VCSATArgs.num_edges = ioArgs->num_edges;
 
-        for (int run_number = 0; run_number < 1; run_number++){
+        for (int run_number = 0; run_number < 10; run_number++){
             
             create_VCSAT = pthread_create(&VCSAT_pid, NULL, VCSAT_thread, (void *)&VCSATArgs);
             if (create_VCSAT != 0){

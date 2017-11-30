@@ -494,10 +494,10 @@ int main() {
     
     std::string user_input = "V 0";
     int num_vert = 0;
-    Matrix::Matrix edges = Matrix::Matrix(0, 0, 0);
+    Matrix edges = Matrix::Matrix(0, 0, 0);
     
     pthread_t io_pid;
-    struct Matrix::ArgsStruct ioArgs;
+    struct ArgsStruct ioArgs;
     ioArgs.user_input = user_input;
     ioArgs.edges = edges;
     ioArgs.num_vert = num_vert;

@@ -91,10 +91,10 @@ void vc_output(std::string algorithm, std::vector<int> vc){
 
 class ioArgsClass {
 public:
-    std::string &user_input;
-    Matrix &edges;
-    int &num_vert;
-    int &result;
+    std::string* user_input;
+    Matrix* edges;
+    int* num_vert;
+    int* result;
 };
 
 int parse_input_into_matrix(ioArgsClass ioArgs){

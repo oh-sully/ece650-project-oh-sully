@@ -54,4 +54,12 @@ struct ArgsStruct {
 };
 
 //thread for io
-void *io_thread(void *args);
+//void *io_thread(void *args);
+
+void *VC1_thread(void *args);
+
+void vc_output(std::string algorithm, std::vector<int> vc);
+
+void *VC2_thread(void *args);
+
+void *VCSAT_thread(void *args)

@@ -1,5 +1,3 @@
-#include "other.hpp"
-/*
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -361,7 +359,7 @@ void *VCSAT_thread(void *args){
     pthread_exit(NULL);
 }
 
-*/
+
 //thread for io
 void *io_thread(void *args){
 
@@ -486,6 +484,7 @@ void *io_thread(void *args){
 
     pthread_exit(NULL);
 }
+
 
 //main function, duh    
 int main() {

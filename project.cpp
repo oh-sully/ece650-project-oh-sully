@@ -494,7 +494,7 @@ int main() {
     
     std::string user_input = "V 0";
     int num_vert = 0;
-    Matrix edges();
+    Matrix edges = Matrix();
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;

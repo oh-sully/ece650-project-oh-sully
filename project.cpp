@@ -142,8 +142,20 @@ void *VC1_thread(void *args){
     }
     vc_output("APPROX-VC-1", VC1Args->vc_list);
     VC1Args->vc_list.erase(VC1Args->vc_list.begin(), VC1Args->vc_list.end());
-    pthread_exit(NULL);
+    
 
+    clockid_t cid;
+    int retcode;
+    retcode = pthread_getcpuclockid(pthread_self(), &cid);
+    if(retcode){
+        std::cerr << "Error with the damn retcode SAT" << std::endl;
+    }
+    else{
+        pclock("VCSAT CPU Time:   ", cid);
+    }
+
+
+    pthread_exit(NULL);
 }
 
 void *VC2_thread(void *args){
@@ -166,6 +178,19 @@ void *VC2_thread(void *args){
     }
     vc_output("APPROX-VC-2", VC2Args->vc_list);
     VC2Args->vc_list.erase(VC2Args->vc_list.begin(), VC2Args->vc_list.end());
+    
+
+    clockid_t cid;
+    int retcode;
+    retcode = pthread_getcpuclockid(pthread_self(), &cid);
+    if(retcode){
+        std::cerr << "Error with the damn retcode SAT" << std::endl;
+    }
+    else{
+        pclock("VC2 CPU Time:   ", cid);
+    }
+
+
     pthread_exit(NULL);
 }
 
@@ -298,6 +323,20 @@ void *VCSAT_thread(void *args){
     }
     solver.reset(new Minisat::Solver());
     VCSATArgs->vc_list.erase(VCSATArgs->vc_list.begin(), VCSATArgs->vc_list.end());
+    
+
+
+    clockid_t cid;
+    int retcode;
+    retcode = pthread_getcpuclockid(pthread_self(), &cid);
+    if(retcode){
+        std::cerr << "Error with the damn retcode SAT" << std::endl;
+    }
+    else{
+        pclock("VCSAT CPU Time:   ", cid);
+    }
+
+
     pthread_exit(NULL);
 
 }
@@ -316,8 +355,8 @@ void *io_thread(void *args){
     struct ArgsStruct VCSATArgs, VC1Args, VC2Args;
     int create_VCSAT, create_VC1, create_VC2;
 
-    clockid_t VCSAT_cid, VC1_cid, VC2_cid;
-    struct timespec ts;
+    //clockid_t VCSAT_cid, VC1_cid, VC2_cid;
+    //struct timespec ts;
     std::vector<double> CPUtimes;
     std::vector< std::vector<double> > stddev; //[algorithm][vertex]
 
@@ -388,10 +427,10 @@ void *io_thread(void *args){
             }
             pthread_join(VCSAT_pid, NULL);
 
-            cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
+            //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
             //clock_gettime(VCSAT_cid, &ts);
             //printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            pclock("VCSAT_time: 1    ", VCSAT_cid);
+            //pclock("VCSAT_time: 1    ", VCSAT_cid);
 
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
@@ -399,20 +438,20 @@ void *io_thread(void *args){
             }
             pthread_join(VC1_pid, NULL);
 
-            cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
+            //cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
             //clock_gettime(VC1_cid, &ts);
             //printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            pclock("VC1_time: 1    ", VC1_cid);
+            //pclock("VC1_time: 1    ", VC1_cid);
 
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;
             }
             pthread_join(VC2_pid, NULL);
-            cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
+            //cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
             //clock_gettime(VC2_cid, &ts);
             //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            pclock("VC2_time: 1    ", VC2_cid);
+            //pclock("VC2_time: 1    ", VC2_cid);
         }
     }
     graphs.close();

@@ -212,8 +212,8 @@ void *VCSAT_thread(void *args){
     struct ArgsStruct *VCSATArgs;
     VCSATArgs = (struct ArgsStruct *) args;
 
-    
-    unsigned int k, up_k, low_k;
+    int k;
+    unsigned int up_k, low_k;
     bool sat_flag = false, sat = false;
     // -- allocate on the heap so that we can reset later if needed
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());

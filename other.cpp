@@ -1,21 +1,4 @@
 #include "other.h"
-/*
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <fstream>
-#include <pthread.h>
-#include <time.h>
-// defined std::unique_ptr
-#include <memory>
-// defines Var, Lit, l_True, and l_False
-#include "minisat/core/SolverTypes.h"
-// defines Solver
-#include "minisat/core/Solver.h"
-// defines vec
-#include "minisat/mtl/Vec.h"
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -39,73 +22,65 @@ static void pclock(char *msg, clockid_t cid){
 
 
 //stores the information for the vertices relationships (e.g. the edges)
-class Matrix {
-private:
-    int rows = 0, cols = 0, edgenum = 0;
-public:
-    std::vector<bool> matrix;
+Matrix::Matrix(){
+    rows = 0;
+    cols = 0;
+    matrix.resize(0, 0);
+}
 
-    Matrix() {
-        rows = 0;
-        cols = 0;
-        matrix.resize(0, 0);
-    }
+Matrix::Matrix(int n, int k, bool str_value) {
+    rows = n;
+    cols = k;
+    matrix.resize(rows * cols, str_value);
+}
 
-    Matrix(int n, int k, bool str_value) {
-        rows = n;
-        cols = k;
-        matrix.resize(rows * cols, str_value);
+void Matrix::edit(int n, int k, bool value) {
+    this->matrix[cols * n + k] = value;
+}
+
+int Matrix::value(int n, int k) {
+    return this->matrix[cols * n + k];
+}
+
+int Matrix::num_of_edges(int v){
+    edgenum = 0;
+    for (int c = 0; c < cols; c++){
+        if (this->value(v,c) == true){
+            edgenum++;
+        }
     }
-    
-    void edit(int n, int k, bool value) {
-        this->matrix[cols * n + k] = value;
-    }
-    
-    int value(int n, int k) {
-        return this->matrix[cols * n + k];
-    }
-    //returns the number of edges with vertex 'v'
-    int num_of_edges(int v){
-        edgenum = 0;
+    return edgenum;
+}
+
+int Matrix::num_of_edges(){
+    for (int r = 0; r < rows; r++){
         for (int c = 0; c < cols; c++){
-            if (this->value(v,c) == true){
+            if (this->value(r,c) == true){
                 edgenum++;
             }
         }
-        return edgenum;
     }
-    //returns the total number of edges
-    int num_of_edges(){
-        for (int r = 0; r < rows; r++){
-            for (int c = 0; c < cols; c++){
-                if (this->value(r,c) == true){
-                    edgenum++;
-                }
-            }
-        }
-        edgenum = edgenum / 2;
-        return edgenum;
-    }
-    //sets to 0 all edges that contain vertex 'v'
-    void clear_edges(int v) {
-        for (int c = 0; c < cols; c++) {
-            this->edit(v, c, 0);
-        }
-        for (int r = 0; r < rows; r++){
-            this->edit(r, v, 0);
-        }
-    }
-   //prints the adjacency matrix
-    void print() {        
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++){
-                std::cout << this->value(r,c) << "  ";
-            }
-            std::cout << std::endl;
-        }
-    }
-};
+    edgenum = edgenum / 2;
+    return edgenum;
+}
 
+void Matrix::clear_edges(int v) {
+    for (int c = 0; c < cols; c++) {
+        this->edit(v, c, 0);
+    }
+    for (int r = 0; r < rows; r++){
+        this->edit(r, v, 0);
+    }
+}
+
+void Matrix::print() {        
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++){
+            std::cout << this->value(r,c) << "  ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 //outputs "PROGRAM_NAME: # # # # # #"
 void vc_output(std::string algorithm, std::vector<int> vc){
@@ -122,18 +97,8 @@ void vc_output(std::string algorithm, std::vector<int> vc){
     }
 }
 
-
-//Struct for passing arguments to the threads
-struct ArgsStruct {
-    std::string user_input;
-    Matrix edges;
-    int num_vert, num_edges;
-    std::vector<int> vc_list;
-};
-
-
 //thread for VC1 algorithm
-void *VC1_thread(void *args){
+void* VC1_thread(void *args){
     struct ArgsStruct *VC1Args;
     VC1Args = (struct ArgsStruct *) args;
     int most_edges;
@@ -393,12 +358,12 @@ void *io_thread(void *args){
         else{
             std::cerr << "Error: unable to open file" << std::endl;
         }
-        // replace the above with the below when ready to submit
-        //getline(std::cin, ioArgs->user_input);
-        //if (std::cin.eof()) {
-        //    break;
-        //}
-        
+        /* replace the above with the below when ready to submit
+        getline(std::cin, ioArgs->user_input);
+        if (std::cin.eof()) {
+            break;
+        }
+        */
         std::istringstream iss(ioArgs->user_input);
         iss >> command;    
         if (command == 'V') {
@@ -486,29 +451,4 @@ void *io_thread(void *args){
     //datafile.close();
 
     pthread_exit(NULL);
-}
-
-*/
-//main function, duh    
-int main() {
-    
-    std::string user_input = "V 0";
-    int num_vert = 0;
-    Matrix edges = Matrix(0, 0, 0);
-    
-    pthread_t io_pid;
-    struct ArgsStruct ioArgs;
-    ioArgs.user_input = user_input;
-    ioArgs.edges = edges;
-    ioArgs.num_vert = num_vert;
-    int create_io;
-
-    create_io = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
-    if (create_io != 0){
-        std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;
-    }
-    pthread_join(io_pid, NULL);
-    
-    
-    return 0;
 }

@@ -123,10 +123,10 @@ void vc_output(std::string algorithm, std::vector<int> vc){
 
 //Struct for passing arguments to the threads
 struct ArgsStruct {
-    std::string user_input;
-    Matrix edges;
-    int num_vert, num_edges;
-    std::vector<int> vc_list;
+    std::string* user_input;
+    Matrix* edges;
+    int* num_vert, num_edges;
+    std::vector<int>* vc_list;
 };
 
 
@@ -495,10 +495,10 @@ int main() {
     Matrix edges = Matrix(0, 0, 0);
     
     pthread_t io_pid;
-    struct ArgsStruct ioArgs;
-    ioArgs.user_input = user_input;
-    ioArgs.edges = edges;
-    ioArgs.num_vert = num_vert;
+    struct ArgsStruct* ioArgs;
+    ioArgs.user_input = &user_input;
+    ioArgs.edges = &edges;
+    ioArgs.num_vert = &num_vert;
     int create_io;
 
     create_io = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
@@ -507,6 +507,7 @@ int main() {
     }
     pthread_join(io_pid, NULL);
     
+    std::cout << "user_input = " << user_input << std::endl;
     
     return 0;
 }

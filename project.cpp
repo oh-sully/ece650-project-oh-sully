@@ -502,6 +502,7 @@ int main() {
     ioArgs.user_input = &user_input;
     ioArgs.edges = &edges;
     ioArgs.num_vert = &num_vert;
+    ioArgs.vc_list = &vc_list;
     int create_io;
 
     create_io = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);

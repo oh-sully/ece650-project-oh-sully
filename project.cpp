@@ -379,8 +379,9 @@ void *io_thread(void *args){
             pthread_join(VCSAT_pid, NULL);
 
             cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
-            clock_gettime(VCSAT_cid, &ts);
-            printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            //clock_gettime(VCSAT_cid, &ts);
+            //printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            pclock("VCSAT_time: 1    ", VCSAT_cid);
 
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
@@ -389,8 +390,9 @@ void *io_thread(void *args){
             pthread_join(VC1_pid, NULL);
 
             cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
-            clock_gettime(VC1_cid, &ts);
-            printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            //clock_gettime(VC1_cid, &ts);
+            //printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            pclock("VC1_time: 1    ", VC1_cid);
 
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
@@ -398,14 +400,25 @@ void *io_thread(void *args){
             }
             pthread_join(VC2_pid, NULL);
             cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
-            clock_gettime(VC2_cid, &ts);
-            printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            //clock_gettime(VC2_cid, &ts);
+            //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            pclock("VC2_time: 1    ", VC2_cid);
         }
     }
     graphs.close();
     //datafile.close();
 
     pthread_exit(NULL);
+}
+
+static void pclock(char *msg, clockid_t cid){
+    struct timespec ts;
+
+    printf("%s", msg);
+    if (clock_gettime(cid, &ts) == -1){
+        std::cout << "Error with gettime" << std::endl;
+    }
+    printf("%4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
 }
     
 int main() {

@@ -290,8 +290,6 @@ void *VCSAT_thread(void *args){
     VCSATArgs->vc_list.erase(VCSATArgs->vc_list.begin(), VCSATArgs->vc_list.end());
     pthread_exit(NULL);
 
-    
-
 }
 
 void *io_thread(void *args){
@@ -382,8 +380,8 @@ void *io_thread(void *args){
 
             cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
             clock_gettime(VCSAT_cid, &ts);
-            std::cout << "VCSAT_time: " << ts.tv_sec << "." << ts.tv_nsec / 1000000 << std::endl;
-
+            printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
+            
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
@@ -392,7 +390,7 @@ void *io_thread(void *args){
 
             cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
             clock_gettime(VC1_cid, &ts);
-            std::cout << "VC1_time: " << ts.tv_sec << "." << ts.tv_nsec / 1000000 << std::endl;
+            printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
 
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
@@ -401,6 +399,7 @@ void *io_thread(void *args){
             pthread_join(VC2_pid, NULL);
             cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
             clock_gettime(VC1_cid, &ts);
+            printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
             std::cout << "VC2_time: " << ts.tv_sec << "." << ts.tv_nsec / 1000000 << std::endl;
         }
     }

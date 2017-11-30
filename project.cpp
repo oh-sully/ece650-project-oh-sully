@@ -1,5 +1,3 @@
-#include "other.h"
-/*
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -393,12 +391,12 @@ void *io_thread(void *args){
         else{
             std::cerr << "Error: unable to open file" << std::endl;
         }
-        // replace the above with the below when ready to submit
-        //getline(std::cin, ioArgs->user_input);
-        //if (std::cin.eof()) {
-        //    break;
-        //}
-        
+        /* replace the above with the below when ready to submit
+        getline(std::cin, ioArgs->user_input);
+        if (std::cin.eof()) {
+            break;
+        }
+        */
         std::istringstream iss(ioArgs->user_input);
         iss >> command;    
         if (command == 'V') {
@@ -488,13 +486,13 @@ void *io_thread(void *args){
     pthread_exit(NULL);
 }
 
-*/
+
 //main function, duh    
 int main() {
     
     std::string user_input = "V 0";
     int num_vert = 0;
-    Matrix edges = Matrix();
+    Matrix edges = Matrix(0, 0, 0);
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;

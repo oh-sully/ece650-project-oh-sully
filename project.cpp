@@ -125,7 +125,8 @@ void vc_output(std::string algorithm, std::vector<int> vc){
 struct ArgsStruct {
     std::string* user_input;
     Matrix* edges;
-    int* num_vert, num_edges;
+    int* num_vert;
+    int* num_edges;
     std::vector<int>* vc_list;
 };
 
@@ -367,7 +368,7 @@ void *io_thread(void *args){
     ioArgs = (struct ArgsStruct *) args;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
     //std::ofstream datafile ("datafile.dat");//to remove when ready to submit
-    int vert1, vert2, num_edges = 0, cpulockid;
+    int vert1, vert2, ioArgs->num_edges = 0, cpulockid;
     char command;
     std::string edges_str, check_str;
 
@@ -431,18 +432,18 @@ void *io_thread(void *args){
             }
         }
         //sets the arguments for the threads in their respective structs
-        VC1Args.user_input = ioArgs->user_input;
-        VC1Args.edges = ioArgs->edges;
-        VC1Args.num_vert = ioArgs->num_vert;
+        VC1Args.user_input = ioArgs.user_input;
+        VC1Args.edges = ioArgs.edges;
+        VC1Args.num_vert = ioArgs.num_vert;
 
-        VC2Args.user_input = ioArgs->user_input;
-        VC2Args.edges = ioArgs->edges;
-        VC2Args.num_vert = ioArgs->num_vert;
+        VC2Args.user_input = ioArgs.user_input;
+        VC2Args.edges = ioArgs.edges;
+        VC2Args.num_vert = ioArgs.num_vert;
 
-        VCSATArgs.user_input = ioArgs->user_input;
-        VCSATArgs.edges = ioArgs->edges;
-        VCSATArgs.num_vert = ioArgs->num_vert;
-        VCSATArgs.num_edges = ioArgs->num_edges;
+        VCSATArgs.user_input = ioArgs.user_input;
+        VCSATArgs.edges = ioArgs.edges;
+        VCSATArgs.num_vert = ioArgs.num_vert;
+        VCSATArgs.num_edges = ioArgs.num_edges;
 
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
@@ -453,31 +454,18 @@ void *io_thread(void *args){
             }
             pthread_join(VCSAT_pid, NULL);
 
-            //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
-            //clock_gettime(VCSAT_cid, &ts);
-            //printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VCSAT_time: 1    ", VCSAT_cid);
-
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
             }
             pthread_join(VC1_pid, NULL);
 
-            //cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
-            //clock_gettime(VC1_cid, &ts);
-            //printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VC1_time: 1    ", VC1_cid);
 
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;
             }
             pthread_join(VC2_pid, NULL);
-            //cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
-            //clock_gettime(VC2_cid, &ts);
-            //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VC2_time: 1    ", VC2_cid);
         }
     }
     graphs.close();
@@ -495,7 +483,7 @@ int main() {
     Matrix edges = Matrix(0, 0, 0);
     
     pthread_t io_pid;
-    struct ArgsStruct* ioArgs;
+    struct ArgsStruct ioArgs;
     ioArgs.user_input = &user_input;
     ioArgs.edges = &edges;
     ioArgs.num_vert = &num_vert;

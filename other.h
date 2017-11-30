@@ -46,5 +46,12 @@ public:
     void print();
 };
 
+struct ArgsStruct {
+    std::string user_input;
+    Matrix edges;
+    int num_vert, num_edges;
+    std::vector<int> vc_list;
+};
+
 //thread for io
 void *io_thread(void *args);

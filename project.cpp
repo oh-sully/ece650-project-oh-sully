@@ -463,7 +463,7 @@ void *io_thread(void *args){
         vc_list.erase(vc_list.begin(), vc_list.end());
         totSATtimes.push_back(CPUtimes);      
 
-                //sets the arguments for the threads in their respective structs
+        //sets the arguments for the threads in their respective structs
         VC1Args.user_input = ioArgs.user_input;
         VC1Args.edges = ioArgs.edges;
         VC1Args.num_vert = ioArgs.num_vert;
@@ -509,6 +509,7 @@ void *io_thread(void *args){
             VC2stddev.push_back(vectosd(totVC2times));
         }
     }
+    graphs.close();
 
     means.push_back(SATmeans);
     means.push_back(VC1means);
@@ -517,14 +518,12 @@ void *io_thread(void *args){
     stddev.push_back(VC1stddev);
     stddev.push_back(VC2stddev);
 
-    graphs.close();
-
     std::vector<int> X;
     X.push_back(3);
     X.push_back(6);
     X.push_back(9);
     X.push_back(12);
-    X.push_back(15);
+    //X.push_back(15);
     //X.push_back(18);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
@@ -541,26 +540,14 @@ void *io_thread(void *args){
     }
 
     datafile.close();
-
-
-    //datafile.close();
-
     pthread_exit(NULL);
 }
 
 
 //main function, duh    
 int main() {
-    /*
-    std::string user_input = "V 0";
-    int num_vert = 0;
-    Matrix edges = Matrix(0, 0, 0);
-    */
+
     pthread_t io_pid;
-    //struct ArgsStruct ioArgs;
-    //ioArgs.user_input = user_input;
-    //ioArgs.edges = edges;
-    //ioArgs.num_vert = num_vert;
     int create_io;
 
     create_io = pthread_create(&io_pid, NULL, io_thread, NULL);
@@ -568,8 +555,6 @@ int main() {
         std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;
     }
     pthread_join(io_pid, NULL);
-    
-    //std::cout << "user_input = " << user_input << std::endl;
     
     return 0;
 }

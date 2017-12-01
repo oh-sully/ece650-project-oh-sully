@@ -148,7 +148,7 @@ void *VC1_thread(void *args){
         if (edges_cpy.num_of_edges() == 0){
             break;
         }
-        (*(VC1Args->vc_list)).push_back(most_edges);
+        VC1Args->vc_list.push_back(most_edges);
         edges_cpy.clear_edges(most_edges);
     }
     vc_output("APPROX-VC-1", VC1Args->vc_list);

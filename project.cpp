@@ -205,9 +205,9 @@ void *VC2_thread(void *args){
             }
         }
     }
-    //vc_output("APPROX-VC-2", *(VC2Args->vc_list));
+    ////vc_output("APPROX-VC-2", *(VC2Args->vc_list));
     std::cout << "VC2-4" << std::endl;
-    (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
+    //(*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
     std::cout << "VC2-5" << std::endl;
 
     clockid_t cid;

@@ -48,9 +48,7 @@ double pclock(/*char *msg, */clockid_t cid){
     datafile.close();
     */
     //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
-    std::cout << "1" << std::endl;
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
-    std::cout << "2" << std::endl;
     CPUtime = std::stod(buffer);
     return CPUtime;
 }
@@ -540,12 +538,15 @@ void *io_thread(void *args){
         std::cout << "30" << std::endl;
 
         if((count % 10) == 0){
+            std::cout << "31" << std::endl;
             means[0].push_back(vectomean(totSATtimes));
             means[1].push_back(vectomean(totVC1times));
             means[2].push_back(vectomean(totVC2times));
+            std::cout << "32" << std::endl;
             stddev[0].push_back(vectosd(totSATtimes));
             stddev[1].push_back(vectosd(totVC1times));
             stddev[2].push_back(vectosd(totVC2times));
+            std::cout << "33" << std::endl;
         }
         std::cout << "40" << std::endl;
     }

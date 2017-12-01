@@ -231,12 +231,12 @@ void *VCSAT_thread(void *args){
     double lower_bound = 0;
     //while((upper_bound - lower_bound)>=1){
     bool flag = true;
-
+    std::cout << "SAT3" << std::endl;
     while(flag){
         double k = ceil(((upper_bound-lower_bound)/2)+lower_bound);
 
         std::vector<std::vector<Minisat::Lit>> literals(k, std::vector<Minisat::Lit>(n));
-
+        std::cout << "SAT4" << std::endl;
         // populate atomic proposition matrix
         for (int position_col = 0; position_col < k; ++position_col){
             std::vector<Minisat::Lit> vars(n);
@@ -246,7 +246,7 @@ void *VCSAT_thread(void *args){
                 literals[position_col][vertex_row] = Minisat::mkLit(solver->newVar());
             }
         }
-
+        std::cout << "SAT5" << std::endl;
         // add first clause - at least one vertex is in ith poisiton of vertex cover
         for (int position_col = 0; position_col < k; ++position_col){
             Minisat::vec<Minisat::Lit> constr;
@@ -255,7 +255,7 @@ void *VCSAT_thread(void *args){
             }
             solver->addClause(constr);
             }
-
+            std::cout << "SAT6" << std::endl;
         // add second clause - no one vertex can appear twice in a vertex cover
         for (int vertex_row = 0; vertex_row < n; ++vertex_row ){
             for (int position_col = 0; position_col < (k-1); ++position_col ){
@@ -268,7 +268,7 @@ void *VCSAT_thread(void *args){
             }
 
         }
-
+        std::cout << "SAT7" << std::endl;
         // add third clause - no more than one vertex appears in the mth position of the vertex cover
         for (int position_col = 0; position_col < k; ++position_col ){
             for (int vertex_row = 0; vertex_row < (n-1); ++vertex_row ){
@@ -281,7 +281,7 @@ void *VCSAT_thread(void *args){
             }
 
         }
-
+        std::cout << "SAT8" << std::endl;
         // add fourth clause - every edge is incident to at least one vertex in the vertex cover
         int num_edges = E_arg.size();
         for (int edge_index = 0; edge_index < num_edges; ++edge_index){
@@ -300,7 +300,7 @@ void *VCSAT_thread(void *args){
         }
 
         bool res = solver->solve();
-
+        std::cout << "SAT8.5" << std::endl;
         if ((upper_bound-lower_bound)<=1 ){
             std::vector<int> output;
             for (int position = 0; position < final_k; ++position){
@@ -312,7 +312,9 @@ void *VCSAT_thread(void *args){
                     }
                 }
             }
+            std::cout << "SAT9" << std::endl;
             *(VCSATArgs->vc_list) = output;
+            std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
         }
 

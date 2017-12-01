@@ -360,6 +360,7 @@ void *io_thread(void *args){
     //ioArgs.Edge = Edge;
     ioArgs.vc_list = &vc_list;
     ioArgs.CPUtimes = &CPUtimes;
+    std::cout << "1" << std::endl;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     int vert1, vert2;
@@ -385,6 +386,7 @@ void *io_thread(void *args){
         else{
             std::cerr << "Error: unable to open file" << std::endl;
         }
+        std::cout << "2" << std::endl;
         // replace the above with the below when ready to submit
         //getline(std::cin, ioArgs->user_input);
         //if (std::cin.eof()) {
@@ -395,6 +397,7 @@ void *io_thread(void *args){
         if (command == 'V') {
             iss >> ioArgs.num_vert;
             ioArgs.edges = Matrix(ioArgs.num_vert, ioArgs.num_vert, 0);
+            std::cout << "V" << std::endl;
             continue;
         }
         else if (command == 'E'){
@@ -407,6 +410,7 @@ void *io_thread(void *args){
             //edges_str is now {< # , # >,< # , # >,< # , # >}
             std::istringstream isss(edges_str);
             isss >> check_str;
+            std::cout << "E" << std::endl;
             //if no edges print a blank line
             if (check_str == "{}" || check_str == "{ }"){
                 std::cout << std::endl;
@@ -445,6 +449,8 @@ void *io_thread(void *args){
         VC1Args.vc_list = ioArgs.vc_list;
         VC1Args.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
+
+        std::cout << "4" << std::endl;
 
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit
         datafile.close();//remove when ready to submit
@@ -508,7 +514,6 @@ int main() {
     //ioArgs.edges = edges;
     //ioArgs.num_vert = num_vert;
     int create_io;
-    std::cout << "HERE" << std::endl;
     create_io = pthread_create(&io_pid, NULL, io_thread, NULL);
     if (create_io != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;

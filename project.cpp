@@ -19,6 +19,8 @@
 #include <deque>
 #include <iomanip>
 #include <locale>
+//for sqrt()
+#include <math.h>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -29,8 +31,10 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
 }
 
 //prints msg and the cpu time
-static void pclock(char *msg, clockid_t cid){
+double pclock(char *msg, clockid_t cid){
     struct timespec ts;
+    std::string buffer;
+    double CPUtime;
 
     //printf("%s", msg);
     if (clock_gettime(cid, &ts) == -1){
@@ -41,8 +45,38 @@ static void pclock(char *msg, clockid_t cid){
     datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
     datafile.close();
     //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    CPUtime = std::stod(buffer);
+    return CPUtime;
 }
 
+double vectomean(std::vector< std::vector<double> > data){
+    double mean = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        for (int ab = 0; ab < data[aa].size(); ab++){
+            mean += data[aa][ab];
+            N++;
+        }
+    }
+    mean = mean / N;
+    return mean;
+}
+
+double vectosd(std::vector< std::vector<double> > data){
+    double u = vectomean(data);
+    int sd = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        for (int ab = 0; ab < data[aa].size(); ab++){
+            sd += (data[aa][ab] - u) * (data[aa][ab] - u);
+            N++;
+        }
+    }
+    sd = sd / N;
+    sd = sqrt(sd);
+    return sd;
+}
 
 //stores the information for the vertices relationships (e.g. the edges)
 class Matrix {
@@ -137,7 +171,7 @@ struct ArgsStruct {
     int num_edges;
     std::vector<int>* vc_list;
     std::vector< std::pair<int,int> > Edge;
-    std::vector<double>* CPUtimes;
+    std::vector<double>* CPUtimes; //[V # graph][CPUtimes]
 };
 
 
@@ -172,7 +206,7 @@ void *VC1_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        pclock("VC1 CPU Time:   ", cid);
+        (*(VC1Args->CPUtimes)).push_back(pclock("VC1 CPU Time:   ", cid));
     }
 
 
@@ -210,7 +244,7 @@ void *VC2_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        pclock("VC2 CPU Time:   ", cid);
+        (*(VC2Args->CPUtimes)).push_back(pclock("VC2 CPU Time:   ", cid));
     }
     pthread_exit(NULL);
 }
@@ -336,7 +370,7 @@ void *VCSAT_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        pclock("VCSAT CPU Time:   ", cid);
+        (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
     }
 
     pthread_exit(NULL);
@@ -353,6 +387,9 @@ void *io_thread(void *args){
     //Matrix edges = Matrix(0, 0, 0);
     std::vector<int> vc_list;
     std::vector<double> CPUtimes;
+    std::vector< vector<double> > totVC1times;
+    std::vector< vector<double> > totVC2times;
+    std::vector< vector<double> > totSATtimes;
     std::vector<std::pair<int,int>> Edge;
     ioArgs.user_input = "V 0";
     ioArgs.edges = Matrix(0,0,0);
@@ -361,8 +398,7 @@ void *io_thread(void *args){
     ioArgs.vc_list = &vc_list;
     ioArgs.CPUtimes = &CPUtimes;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
-    std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
-    int vert1, vert2;
+    int vert1, vert2, count = 0;
     char command;
     std::string edges_str, check_str;
 
@@ -372,6 +408,7 @@ void *io_thread(void *args){
 
     //clockid_t VCSAT_cid, VC1_cid, VC2_cid;
     //struct timespec ts;
+    std::vector< std::vector<double> > means;
     std::vector< std::vector<double> > stddev; //[algorithm][vertex]
 
     while(true){
@@ -446,8 +483,7 @@ void *io_thread(void *args){
         VCSATArgs.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
-        datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit
-        datafile.close();//remove when ready to submit
+        count++;
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
             
@@ -458,11 +494,15 @@ void *io_thread(void *args){
             pthread_join(VCSAT_pid, NULL);
             vc_output("CNF-SAT-VC", vc_list);
 
+
             //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
             //clock_gettime(VCSAT_cid, &ts);
             //printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
             //pclock("VCSAT_time: 1    ", VCSAT_cid);
+        }
+        totVC1times.push_back(CPUtimes);        
 
+        for (int run_number = 0; run_number < 1; run_number++){
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
@@ -474,7 +514,10 @@ void *io_thread(void *args){
             //clock_gettime(VC1_cid, &ts);
             //printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
             //pclock("VC1_time: 1    ", VC1_cid);
+        }
+        totVC2times.push_back(CPUtimes);
 
+        for (int run_number = 0; run_number < 1; run_number++){
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;
@@ -487,8 +530,43 @@ void *io_thread(void *args){
             //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
             //pclock("VC2_time: 1    ", VC2_cid);
         }
+        totSATtimes.push_back(CPUtimes);
+
+        if((count % 10) == 0){
+            means[0].push_back(vectomean(totSATtimes));
+            means[1].push_back(vectomean(totVC1times));
+            means[2].push_back(vectomean(totVC2times));
+            stddev[0].push_back(vectosd(totSATtimes));
+            stddev[1].push_back(vectosd(totVC1times));
+            stddev[2].push_back(vectosd(totVC2times));
+        }
     }
     graphs.close();
+
+    std::vector<int> X;
+    X.push_back(3);
+    X.push_back(6);
+    X.push_back(9);
+    X.push_back(12);
+    //X.push_back(15);
+    //X.push_back(18);
+    std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
+    datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
+    datafile.close();//remove when ready to submit
+
+    datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
+
+    for(int bb = 0; bb < X.size(); bb++){
+        datafile << X[bb];
+        for (int bc = 0; bc < means.size(); bc++){
+            datafile << "    " << means[bc][bb] << "    " << stddev[bc][bb];
+        }
+        datafile << std::endl;
+    }
+
+    datafile.close();
+
+
     //datafile.close();
 
     pthread_exit(NULL);

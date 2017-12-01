@@ -458,6 +458,9 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
             }
             pthread_join(VCSAT_pid, NULL);
+            if (run_number == 9){
+                vc_output("APPROX-VC-2", vc_list);
+            }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("CNF-SAT-VC", vc_list);
@@ -475,6 +478,9 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
             }
             pthread_join(VC1_pid, NULL);
+            if (run_number == 9){
+                vc_output("APPROX-VC-1", vc_list);
+            }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("APPROX-VC-1", vc_list);
@@ -491,9 +497,11 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;
             }
             pthread_join(VC2_pid, NULL);
+            if (run_number == 9){
+                vc_output("APPROX-VC-2", vc_list);
+            }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
-        vc_output("APPROX-VC-2", vc_list);
         totVC2times.push_back(CPUtimes);
 
         if((count % 10) == 0){

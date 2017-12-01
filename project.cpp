@@ -196,9 +196,9 @@ void *VC2_thread(void *args){
         for (int c = 0; c < VC2Args->num_vert; c++){
             if (edges_cpy.value(r,c) == true) {
                 std::cout << "VC2-1" << std::endl;
-                //(*(VC2Args->vc_list)).push_back(r);
+                (*(VC2Args->vc_list)).push_back(r);
                 std::cout << "VC2-2" << std::endl;
-                //(*(VC2Args->vc_list)).push_back(c);
+                (*(VC2Args->vc_list)).push_back(c);
                 std::cout << "VC2-3" << std::endl;
                 edges_cpy.clear_edges(r);
                 edges_cpy.clear_edges(c);
@@ -206,9 +206,9 @@ void *VC2_thread(void *args){
             }
         }
     }
-    ////vc_output("APPROX-VC-2", *(VC2Args->vc_list));
+    //vc_output("APPROX-VC-2", *(VC2Args->vc_list));
     std::cout << "VC2-4" << std::endl;
-    //(*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
+    (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
     std::cout << "VC2-5" << std::endl;
 
     clockid_t cid;
@@ -474,7 +474,7 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
             }
             pthread_join(VCSAT_pid, NULL);
-            //vc_output("CNF-SAT-VC", vc_list);
+            vc_output("CNF-SAT-VC", vc_list);
 
             //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
             //clock_gettime(VCSAT_cid, &ts);

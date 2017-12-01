@@ -387,9 +387,9 @@ void *io_thread(void *args){
     //Matrix edges = Matrix(0, 0, 0);
     std::vector<int> vc_list;
     std::vector<double> CPUtimes;
-    std::vector< vector<double> > totVC1times;
-    std::vector< vector<double> > totVC2times;
-    std::vector< vector<double> > totSATtimes;
+    std::vector< std::vector<double> > totVC1times;
+    std::vector< std::vector<double> > totVC2times;
+    std::vector< std::vector<double> > totSATtimes;
     std::vector<std::pair<int,int>> Edge;
     ioArgs.user_input = "V 0";
     ioArgs.edges = Matrix(0,0,0);

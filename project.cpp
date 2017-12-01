@@ -323,7 +323,6 @@ void *VCSAT_thread(void *args){
             }
             std::cout << "type of *(VCSATArgs->vc_list is " << typeid(VCSATArgs->vc_list).name() << std::endl;
             std::cout << "SAT9" << std::endl;
-            std::cout << "BAM" << std::endl;
             *(VCSATArgs->vc_list) = output;
             std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
@@ -451,7 +450,7 @@ void *io_thread(void *args){
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
         VC2Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = ioArgs.vc_list;
+        VC2Args.vc_list = ioArgs.vc_list;
         VC2Args.CPUtimes = ioArgs.CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
@@ -459,8 +458,8 @@ void *io_thread(void *args){
         VCSATArgs.num_vert = ioArgs.num_vert;
         VCSATArgs.num_edges = ioArgs.num_edges;
         VCSATArgs.Edge = ioArgs.Edge;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC1Args.CPUtimes = ioArgs.CPUtimes;
+        VCSATArgs.vc_list = ioArgs.vc_list;
+        VCSATArgs.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
         std::cout << "4" << std::endl;

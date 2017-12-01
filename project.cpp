@@ -177,7 +177,7 @@ void *VC1_thread(void *args){
     else{
         pclock("VC1 CPU Time:   ", cid);
     }
-    std::cout << "VC1-5" << std::endl;
+    std::cout << "VC1-exit" << std::endl;
 
     pthread_exit(NULL);
 }
@@ -194,8 +194,11 @@ void *VC2_thread(void *args){
         //adds both vertices from the edge to 
         for (int c = 0; c < VC2Args->num_vert; c++){
             if (edges_cpy.value(r,c) == true) {
+                std::cout << "VC2-1" << std::endl;
                 (*(VC2Args->vc_list)).push_back(r);
+                std::cout << "VC2-2" << std::endl;
                 (*(VC2Args->vc_list)).push_back(c);
+                std::cout << "VC2-3" << std::endl;
                 edges_cpy.clear_edges(r);
                 edges_cpy.clear_edges(c);
                 break;
@@ -203,8 +206,9 @@ void *VC2_thread(void *args){
         }
     }
     //vc_output("APPROX-VC-2", *(VC2Args->vc_list));
+    std::cout << "VC2-4" << std::endl;
     (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
-    
+    std::cout << "VC2-5" << std::endl;
 
     clockid_t cid;
     int retcode;
@@ -215,6 +219,7 @@ void *VC2_thread(void *args){
     else{
         pclock("VC2 CPU Time:   ", cid);
     }
+    std::cout << "VC2-exit" << std::endl;
     pthread_exit(NULL);
 }
 

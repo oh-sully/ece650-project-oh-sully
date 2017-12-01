@@ -50,6 +50,7 @@ double pclock(char *msg, clockid_t cid){
     //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
+    std::cout << "CPUtime: " << CPUtime << std::endl;
     return CPUtime;
 }
 
@@ -377,7 +378,7 @@ void *VCSAT_thread(void *args){
         double pc = pclock("VCSAT CPU Time:   ", cid);
         std::cout << "1.5" << std::endl;
         std::cout << "pc = " << pc << std::endl;
-        (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
+        (*(VCSATArgs->CPUtimes)).push_back(pc);
         std::cout << "2" << std::endl;
     }
 

@@ -181,7 +181,6 @@ void *VC1_thread(void *args){
         (*(VC1Args->vc_list)).push_back(most_edges);
         edges_cpy.clear_edges(most_edges);
     }
-    (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
     
 
     clockid_t cid;
@@ -218,7 +217,6 @@ void *VC2_thread(void *args){
             }
         }
     }
-    (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
     
 
     clockid_t cid;
@@ -460,10 +458,10 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
             }
             pthread_join(VCSAT_pid, NULL);
+            vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("CNF-SAT-VC", vc_list);
         totSATtimes.push_back(CPUtimes);      
-        vc_list.erase(vc_list.begin(), vc_list.end());
 
                 //sets the arguments for the threads in their respective structs
         VC1Args.user_input = ioArgs.user_input;
@@ -477,10 +475,10 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
             }
             pthread_join(VC1_pid, NULL);
+            vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("APPROX-VC-1", vc_list);
         totVC1times.push_back(CPUtimes);
-        vc_list.erase(vc_list.begin(), vc_list.end());
 
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
@@ -493,10 +491,10 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;
             }
             pthread_join(VC2_pid, NULL);
+            vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("APPROX-VC-2", vc_list);
         totVC2times.push_back(CPUtimes);
-        vc_list.erase(vc_list.begin(), vc_list.end());
 
         if((count % 10) == 0){
             SATmeans.push_back(vectomean(totSATtimes));

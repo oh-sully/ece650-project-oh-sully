@@ -221,9 +221,9 @@ void *VCSAT_thread(void *args){
     VCSATArgs = (struct ArgsStruct *) args;
     std::cout << "SAT1" << std::endl;
     const std::vector< std::pair<int,int> > E_arg = VCSATArgs->Edge;
-    const double n = (double)VCSATArgs->num_vert;
+    double n = (double)VCSATArgs->num_vert;
     std::cout << "SAT2" << std::endl;
-    int final_k = n;
+    double final_k = n;
     std::cout << "SAT2.1" << std::endl;
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
     std::cout << "SAT2.2" << std::endl;

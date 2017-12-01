@@ -21,6 +21,7 @@
 #include <locale>
 //for sqrt()
 #include <math.h>
+#include <typeinfo>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -49,7 +50,7 @@ double pclock(char *msg, clockid_t cid){
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "2" << std::endl;
     CPUtime = std::stod(buffer);
-    std::cout << "CPUtime: " << CPUtime << "; type: " << typeof(CPUtime).name() << std::endl;
+    std::cout << "CPUtime: " << CPUtime << "; type: " << std::typeid(CPUtime).name() << std::endl;
     return CPUtime;
 }
 

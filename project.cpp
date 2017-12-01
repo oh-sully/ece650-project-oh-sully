@@ -19,7 +19,6 @@
 #include <deque>
 #include <iomanip>
 #include <locale>
-#include <typeinfo>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -159,15 +158,12 @@ void *VC1_thread(void *args){
         if (edges_cpy.num_of_edges() == 0){
             break;
         }
-        std::cout << "VC1-1" << std::endl;
         (*(VC1Args->vc_list)).push_back(most_edges);
-        std::cout << "VC1-2" << std::endl;
         edges_cpy.clear_edges(most_edges);
     }
     //vc_output("APPROX-VC-1", VC1Args->vc_list);
-    std::cout << "VC1-3" << std::endl;
     (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
-    std::cout << "VC1-4" << std::endl;
+    
 
     clockid_t cid;
     int retcode;
@@ -178,7 +174,7 @@ void *VC1_thread(void *args){
     else{
         pclock("VC1 CPU Time:   ", cid);
     }
-    std::cout << "VC1-exit" << std::endl;
+
 
     pthread_exit(NULL);
 }
@@ -195,11 +191,8 @@ void *VC2_thread(void *args){
         //adds both vertices from the edge to 
         for (int c = 0; c < VC2Args->num_vert; c++){
             if (edges_cpy.value(r,c) == true) {
-                std::cout << "VC2-1" << std::endl;
                 (*(VC2Args->vc_list)).push_back(r);
-                std::cout << "VC2-2" << std::endl;
                 (*(VC2Args->vc_list)).push_back(c);
-                std::cout << "VC2-3" << std::endl;
                 edges_cpy.clear_edges(r);
                 edges_cpy.clear_edges(c);
                 break;
@@ -207,9 +200,8 @@ void *VC2_thread(void *args){
         }
     }
     //vc_output("APPROX-VC-2", *(VC2Args->vc_list));
-    std::cout << "VC2-4" << std::endl;
     (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
-    std::cout << "VC2-5" << std::endl;
+    
 
     clockid_t cid;
     int retcode;
@@ -220,7 +212,6 @@ void *VC2_thread(void *args){
     else{
         pclock("VC2 CPU Time:   ", cid);
     }
-    std::cout << "VC2-exit" << std::endl;
     pthread_exit(NULL);
 }
 
@@ -228,24 +219,24 @@ void *VC2_thread(void *args){
 void *VCSAT_thread(void *args){
     struct ArgsStruct *VCSATArgs;
     VCSATArgs = (struct ArgsStruct *) args;
-    std::cout << "SAT1" << std::endl;
+
     const std::vector< std::pair<int,int> > E_arg = VCSATArgs->Edge;
-    double n = (double)VCSATArgs->num_vert;
-    std::cout << "SAT2" << std::endl;
-    double final_k = n;
-    std::cout << "SAT2.1" << std::endl;
+    const double n = (double)VCSATArgs->num_vert;
+
+    int final_k = n;
+
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
-    std::cout << "SAT2.2" << std::endl;
+
     double upper_bound = n;
     double lower_bound = 0;
     //while((upper_bound - lower_bound)>=1){
     bool flag = true;
-    std::cout << "SAT3" << std::endl;
+
     while(flag){
         double k = ceil(((upper_bound-lower_bound)/2)+lower_bound);
 
         std::vector<std::vector<Minisat::Lit>> literals(k, std::vector<Minisat::Lit>(n));
-        std::cout << "SAT4" << std::endl;
+
         // populate atomic proposition matrix
         for (int position_col = 0; position_col < k; ++position_col){
             std::vector<Minisat::Lit> vars(n);
@@ -255,7 +246,7 @@ void *VCSAT_thread(void *args){
                 literals[position_col][vertex_row] = Minisat::mkLit(solver->newVar());
             }
         }
-        std::cout << "SAT5" << std::endl;
+
         // add first clause - at least one vertex is in ith poisiton of vertex cover
         for (int position_col = 0; position_col < k; ++position_col){
             Minisat::vec<Minisat::Lit> constr;
@@ -264,7 +255,7 @@ void *VCSAT_thread(void *args){
             }
             solver->addClause(constr);
             }
-            std::cout << "SAT6" << std::endl;
+
         // add second clause - no one vertex can appear twice in a vertex cover
         for (int vertex_row = 0; vertex_row < n; ++vertex_row ){
             for (int position_col = 0; position_col < (k-1); ++position_col ){
@@ -277,7 +268,7 @@ void *VCSAT_thread(void *args){
             }
 
         }
-        std::cout << "SAT7" << std::endl;
+
         // add third clause - no more than one vertex appears in the mth position of the vertex cover
         for (int position_col = 0; position_col < k; ++position_col ){
             for (int vertex_row = 0; vertex_row < (n-1); ++vertex_row ){
@@ -290,7 +281,7 @@ void *VCSAT_thread(void *args){
             }
 
         }
-        std::cout << "SAT8" << std::endl;
+
         // add fourth clause - every edge is incident to at least one vertex in the vertex cover
         int num_edges = E_arg.size();
         for (int edge_index = 0; edge_index < num_edges; ++edge_index){
@@ -309,7 +300,7 @@ void *VCSAT_thread(void *args){
         }
 
         bool res = solver->solve();
-        std::cout << "SAT8.5" << std::endl;
+
         if ((upper_bound-lower_bound)<=1 ){
             std::vector<int> output;
             for (int position = 0; position < final_k; ++position){
@@ -321,10 +312,7 @@ void *VCSAT_thread(void *args){
                     }
                 }
             }
-            std::cout << "type of *(VCSATArgs->vc_list is " << typeid(VCSATArgs->vc_list).name() << std::endl;
-            std::cout << "SAT9" << std::endl;
             *(VCSATArgs->vc_list) = output;
-            std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
         }
 
@@ -340,7 +328,7 @@ void *VCSAT_thread(void *args){
         solver.reset (new Minisat::Solver());
     }
 
-    std::cout << "SATE" << std::endl;
+
     clockid_t cid;
     int retcode;
     retcode = pthread_getcpuclockid(pthread_self(), &cid);
@@ -372,7 +360,6 @@ void *io_thread(void *args){
     //ioArgs.Edge = Edge;
     ioArgs.vc_list = &vc_list;
     ioArgs.CPUtimes = &CPUtimes;
-    std::cout << "1" << std::endl;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     int vert1, vert2;
@@ -398,7 +385,6 @@ void *io_thread(void *args){
         else{
             std::cerr << "Error: unable to open file" << std::endl;
         }
-        std::cout << "2" << std::endl;
         // replace the above with the below when ready to submit
         //getline(std::cin, ioArgs->user_input);
         //if (std::cin.eof()) {
@@ -409,7 +395,6 @@ void *io_thread(void *args){
         if (command == 'V') {
             iss >> ioArgs.num_vert;
             ioArgs.edges = Matrix(ioArgs.num_vert, ioArgs.num_vert, 0);
-            std::cout << "V" << std::endl;
             continue;
         }
         else if (command == 'E'){
@@ -422,7 +407,6 @@ void *io_thread(void *args){
             //edges_str is now {< # , # >,< # , # >,< # , # >}
             std::istringstream isss(edges_str);
             isss >> check_str;
-            std::cout << "E" << std::endl;
             //if no edges print a blank line
             if (check_str == "{}" || check_str == "{ }"){
                 std::cout << std::endl;
@@ -450,7 +434,7 @@ void *io_thread(void *args){
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
         VC2Args.num_vert = ioArgs.num_vert;
-        VC2Args.vc_list = ioArgs.vc_list;
+        VC1Args.vc_list = ioArgs.vc_list;
         VC2Args.CPUtimes = ioArgs.CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
@@ -458,17 +442,15 @@ void *io_thread(void *args){
         VCSATArgs.num_vert = ioArgs.num_vert;
         VCSATArgs.num_edges = ioArgs.num_edges;
         VCSATArgs.Edge = ioArgs.Edge;
-        VCSATArgs.vc_list = ioArgs.vc_list;
-        VCSATArgs.CPUtimes = ioArgs.CPUtimes;
+        VC1Args.vc_list = ioArgs.vc_list;
+        VC1Args.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
-
-        std::cout << "4" << std::endl;
 
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit
         datafile.close();//remove when ready to submit
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
-            std::cout << "Threads Start" << std::endl;
+            
             create_VCSAT = pthread_create(&VCSAT_pid, NULL, VCSAT_thread, (void *)&VCSATArgs);
             if (create_VCSAT != 0){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
@@ -526,6 +508,7 @@ int main() {
     //ioArgs.edges = edges;
     //ioArgs.num_vert = num_vert;
     int create_io;
+
     create_io = pthread_create(&io_pid, NULL, io_thread, NULL);
     if (create_io != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;

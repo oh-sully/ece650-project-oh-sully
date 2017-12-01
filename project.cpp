@@ -181,6 +181,7 @@ void *VC1_thread(void *args){
         (*(VC1Args->vc_list)).push_back(most_edges);
         edges_cpy.clear_edges(most_edges);
     }
+    (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
     
 
     clockid_t cid;

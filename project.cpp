@@ -442,18 +442,6 @@ void *io_thread(void *args){
                 ioArgs.Edge.push_back(std::make_pair(vert1,vert2));
             }
         }
-        //sets the arguments for the threads in their respective structs
-        VC1Args.user_input = ioArgs.user_input;
-        VC1Args.edges = ioArgs.edges;
-        VC1Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC1Args.CPUtimes = ioArgs.CPUtimes;
-
-        VC2Args.user_input = ioArgs.user_input;
-        VC2Args.edges = ioArgs.edges;
-        VC2Args.num_vert = ioArgs.num_vert;
-        VC2Args.vc_list = ioArgs.vc_list;
-        VC2Args.CPUtimes = ioArgs.CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
         VCSATArgs.edges = ioArgs.edges;
@@ -478,6 +466,12 @@ void *io_thread(void *args){
         totSATtimes.push_back(CPUtimes);      
         vc_list.erase(vc_list.begin(), vc_list.end());
 
+                //sets the arguments for the threads in their respective structs
+        VC1Args.user_input = ioArgs.user_input;
+        VC1Args.edges = ioArgs.edges;
+        VC1Args.num_vert = ioArgs.num_vert;
+        VC1Args.vc_list = ioArgs.vc_list;
+        VC1Args.CPUtimes = ioArgs.CPUtimes;
         for (int run_number = 0; run_number < 10; run_number++){
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
@@ -490,6 +484,11 @@ void *io_thread(void *args){
         totVC1times.push_back(CPUtimes);
         vc_list.erase(vc_list.begin(), vc_list.end());
 
+        VC2Args.user_input = ioArgs.user_input;
+        VC2Args.edges = ioArgs.edges;
+        VC2Args.num_vert = ioArgs.num_vert;
+        VC2Args.vc_list = ioArgs.vc_list;
+        VC2Args.CPUtimes = ioArgs.CPUtimes;
         for (int run_number = 0; run_number < 10; run_number++){
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){

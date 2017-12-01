@@ -42,13 +42,15 @@ double pclock(char *msg, clockid_t cid){
         std::cout << "Error with gettime" << std::endl;
     }
     std::cout << "1.1" << std::endl;
+    /*
     std::fstream datafile;
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
     datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
     datafile.close();
+    */
     
     std::cout << "1.2" << std::endl;
-    sprintf(buffer, '9');
+    sprintf(buffer, "9");
     //sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "1.3" << std::endl;
     CPUtime = std::stod(buffer);

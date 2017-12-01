@@ -307,14 +307,14 @@ void *VCSAT_thread(void *args){
                 for (int vertex = 0; vertex < n; ++vertex){
                     int vert_cover = Minisat::toInt(solver->modelValue(literals[position][vertex]));
                     if (vert_cover == 0){
-                        output.emplace_back(vertex);
+                        std::cout << "SAT9" << std::endl;
+                        *(VCSATArgs->vc_list).push_back(vertex);
+                        std::cout << "SAT10" << std::endl;
+                        //output.emplace_back(vertex);
                         flag = false;
                     }
                 }
             }
-            std::cout << "SAT9" << std::endl;
-            *(*(VCSATArgs->vc_list)) = output;
-            std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
         }
 

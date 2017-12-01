@@ -428,22 +428,22 @@ void *io_thread(void *args){
         VC1Args.user_input = ioArgs.user_input;
         VC1Args.edges = ioArgs.edges;
         VC1Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC1Args.CPUtimes = ioArgs.CPUtimes;
+        VC1Args.vc_list = &vc_list;
+        VC1Args.CPUtimes = &CPUtimes;
 
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
         VC2Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC2Args.CPUtimes = ioArgs.CPUtimes;
+        VC1Args.vc_list = &vc_list;
+        VC2Args.CPUtimes = &CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
         VCSATArgs.edges = ioArgs.edges;
         VCSATArgs.num_vert = ioArgs.num_vert;
         VCSATArgs.num_edges = ioArgs.num_edges;
         VCSATArgs.Edge = ioArgs.Edge;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC1Args.CPUtimes = ioArgs.CPUtimes;
+        VC1Args.vc_list = &vc_list;
+        VC1Args.CPUtimes = &CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit

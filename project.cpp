@@ -307,14 +307,14 @@ void *VCSAT_thread(void *args){
                 for (int vertex = 0; vertex < n; ++vertex){
                     int vert_cover = Minisat::toInt(solver->modelValue(literals[position][vertex]));
                     if (vert_cover == 0){
-                        std::cout << "SAT9" << std::endl;
-                        (*(VCSATArgs->vc_list)).push_back(vertex);
-                        std::cout << "SAT10" << std::endl;
-                        //output.emplace_back(vertex);
+                        output.emplace_back(vertex);
                         flag = false;
                     }
                 }
             }
+            std::cout << "SAT9" << std::endl;
+            //*(VCSATArgs->vc_list) = output;
+            std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
         }
 
@@ -464,7 +464,7 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
             }
             pthread_join(VCSAT_pid, NULL);
-            vc_output("CNF-SAT-VC", vc_list);
+            //vc_output("CNF-SAT-VC", vc_list);
 
             //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
             //clock_gettime(VCSAT_cid, &ts);

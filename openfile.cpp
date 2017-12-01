@@ -1,22 +1,7 @@
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <fstream>
 #include <pthread.h>
 #include <time.h>
-
-//prints msg and the cpu time
-static void pclock(char *msg, clockid_t cid){
-    struct timespec ts;
-
-    printf("%s", msg);
-    if (clock_gettime(cid, &ts) == -1){
-        std::cout << "Error with gettime" << std::endl;
-    }
-    printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
-}
 
 //Struct for passing arguments to the threads
 struct ArgsStruct {
@@ -28,10 +13,9 @@ void *io_thread(void *args){
 
     struct ArgsStruct *ioArgs;
     ioArgs = (struct ArgsStruct *) args;
-
     ioArgs->user_input = "APPLES";
 
-    std::cout << "user_input (io) = " << user_input << std::endl;
+    std::cout << "user_input (io) = " << ioArgs->user_input << std::endl;
     pthread_exit(NULL);
 }
 
@@ -39,8 +23,6 @@ void *io_thread(void *args){
 int main() {
     
     std::string user_input = "V 0";
-    int num_vert = 0;
-    Matrix edges = Matrix(0, 0, 0);
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;
@@ -54,6 +36,7 @@ int main() {
     pthread_join(io_pid, NULL);
     
     std::cout << "user_input (main) = " << user_input << std::endl;
+    std::cout << "user_input (main) = " << &user_input << std::endl;
     
     return 0;
 }
@@ -64,15 +47,6 @@ void *VC1_thread(void *args){
     struct ArgsStruct *VC1Args;
     VC1Args = (struct ArgsStruct *) args;
 
-    clockid_t cid;
-    int retcode;
-    retcode = pthread_getcpuclockid(pthread_self(), &cid);
-    if(retcode){
-        std::cerr << "Error with the damn retcode SAT" << std::endl;
-    }
-    else{
-        pclock("VCSAT CPU Time:   ", cid);
-    }
     pthread_exit(NULL);
 }
 
@@ -81,16 +55,7 @@ void *VC1_thread(void *args){
 void *VC2_thread(void *args){
     struct ArgsStruct *VC2Args;
     VC2Args = (struct ArgsStruct *) args;
-    
-    clockid_t cid;
-    int retcode;
-    retcode = pthread_getcpuclockid(pthread_self(), &cid);
-    if(retcode){
-        std::cerr << "Error with the damn retcode SAT" << std::endl;
-    }
-    else{
-        pclock("VC2 CPU Time:   ", cid);
-    }
+
     pthread_exit(NULL);
 }
 
@@ -100,15 +65,6 @@ void *VCSAT_thread(void *args){
     struct ArgsStruct *VCSATArgs;
     VCSATArgs = (struct ArgsStruct *) args;
 
-    clockid_t cid;
-    int retcode;
-    retcode = pthread_getcpuclockid(pthread_self(), &cid);
-    if(retcode){
-        std::cerr << "Error with the damn retcode SAT" << std::endl;
-    }
-    else{
-        pclock("VCSAT CPU Time:   ", cid);
-    }
     pthread_exit(NULL);
 }
 */

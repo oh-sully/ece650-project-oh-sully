@@ -32,7 +32,7 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
 }
 
 //prints msg and the cpu time
-double pclock(char *msg, clockid_t cid){
+double pclock(/*char *msg, */clockid_t cid){
     struct timespec ts;
     char buffer[20];
     double CPUtime;
@@ -49,10 +49,9 @@ double pclock(char *msg, clockid_t cid){
     */
     //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "1" << std::endl;
-    sprintf(buffer, "1234");
+    sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "2" << std::endl;
     CPUtime = std::stod(buffer);
-    std::cout << "CPUtime: " << CPUtime << "; type: " << typeid(CPUtime).name() << std::endl;
     return CPUtime;
 }
 
@@ -212,7 +211,7 @@ void *VC1_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        (*(VC1Args->CPUtimes)).push_back(pclock("VC1 CPU Time:   ", cid));
+        (*(VC1Args->CPUtimes)).push_back(pclock(cid));
     }
 
 
@@ -250,7 +249,7 @@ void *VC2_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        (*(VC2Args->CPUtimes)).push_back(pclock("VC2 CPU Time:   ", cid));
+        (*(VC2Args->CPUtimes)).push_back(pclock(cid));
     }
     pthread_exit(NULL);
 }
@@ -376,9 +375,7 @@ void *VCSAT_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        std::cout << "10" << std::endl;
-        (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
-        std::cout << "20" << std::endl;
+        (*(VCSATArgs->CPUtimes)).push_back(pclock(cid));
     }
 
     pthread_exit(NULL);
@@ -538,7 +535,9 @@ void *io_thread(void *args){
             //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
             //pclock("VC2_time: 1    ", VC2_cid);
         }
+        std::cout << "end first graph" << std::endl;
         totSATtimes.push_back(CPUtimes);
+        std::cout << "30" << std::endl;
 
         if((count % 10) == 0){
             means[0].push_back(vectomean(totSATtimes));
@@ -548,7 +547,9 @@ void *io_thread(void *args){
             stddev[1].push_back(vectosd(totVC1times));
             stddev[2].push_back(vectosd(totVC2times));
         }
+        std::cout << "40" << std::endl;
     }
+    std::cout << "out of loop" << std::endl;
     graphs.close();
 
     std::vector<int> X;
@@ -558,6 +559,7 @@ void *io_thread(void *args){
     X.push_back(12);
     //X.push_back(15);
     //X.push_back(18);
+    std::cout << "50" << std::endl;
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit

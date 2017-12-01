@@ -524,7 +524,7 @@ void *io_thread(void *args){
     X.push_back(6);
     X.push_back(9);
     X.push_back(12);
-    //X.push_back(15);
+    X.push_back(15);
     //X.push_back(18);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
@@ -532,9 +532,9 @@ void *io_thread(void *args){
 
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
 
-    for(int bb = 0; bb < X.size(); bb++){
+    for(unsigned int bb = 0; bb < X.size(); bb++){
         datafile << X[bb];
-        for (int bc = 0; bc < means.size(); bc++){
+        for (unsigned int bc = 0; bc < means.size(); bc++){
             datafile << "    " << means[bc][bb] << "    " << stddev[bc][bb];
         }
         datafile << std::endl;

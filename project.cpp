@@ -224,9 +224,9 @@ void *VCSAT_thread(void *args){
     const double n = (double)VCSATArgs->num_vert;
     std::cout << "SAT2" << std::endl;
     int final_k = n;
-
+    std::cout << "SAT2.1" << std::endl;
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
-
+    std::cout << "SAT2.2" << std::endl;
     double upper_bound = n;
     double lower_bound = 0;
     //while((upper_bound - lower_bound)>=1){

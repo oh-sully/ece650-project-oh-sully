@@ -322,7 +322,7 @@ void *VCSAT_thread(void *args){
                 }
             }
             std::cout << "SAT9" << std::endl;
-            std::cout << "type of *(VCSATArgs->vc_list is " << typeid(num_edges).name();
+            std::cout << "type of *(VCSATArgs->vc_list is " std::endl;
             *(VCSATArgs->vc_list) = output;
             std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);

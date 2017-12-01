@@ -20,5 +20,6 @@ include_directories(${CMAKE_SOURCE_DIR}/minisat)
 ## add additional .cpp files if needed
 #add_executable(ece650-project ece650-project.cpp)
 add_executable(project project.cpp)
+add_executable(project openfile.cpp)
 # link MiniSAT libraries
 target_link_libraries(project minisat-lib-static)

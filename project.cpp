@@ -19,6 +19,7 @@
 #include <deque>
 #include <iomanip>
 #include <locale>
+#include <typeinfo>
 
 void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace) {
     size_t pos = 0;
@@ -321,7 +322,8 @@ void *VCSAT_thread(void *args){
                 }
             }
             std::cout << "SAT9" << std::endl;
-            //*(VCSATArgs->vc_list) = output;
+            std::cout << "type of *(VCSATArgs->vc_list is " << std::typeid(*(VCSATArgs->vc_list)).name();
+            *(VCSATArgs->vc_list) = output;
             std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);
         }

@@ -321,8 +321,9 @@ void *VCSAT_thread(void *args){
                     }
                 }
             }
-            std::cout << "type of *(VCSATArgs->vc_list is " << typeid(VCSATArgs).name() << std::endl;
+            std::cout << "type of *(VCSATArgs->vc_list is " << typeid(VCSATArgs->vc_list).name() << std::endl;
             std::cout << "SAT9" << std::endl;
+            std::cout << "BAM" << std::endl;
             *(VCSATArgs->vc_list) = output;
             std::cout << "SAT10" << std::endl;
             //vc_output("CNF-SAT-VC", output);

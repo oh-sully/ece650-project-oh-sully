@@ -49,7 +49,7 @@ double pclock(char *msg, clockid_t cid){
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "2" << std::endl;
     CPUtime = std::stod(buffer);
-    std::cout << "3" << std::endl;
+    std::cout << "CPUtime: " << CPUtime << "; type: " << typeof(CPUtime).name() << std::endl;
     return CPUtime;
 }
 

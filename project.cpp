@@ -458,12 +458,9 @@ void *io_thread(void *args){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;
             }
             pthread_join(VCSAT_pid, NULL);
-            if (run_number == 9){
-                vc_output("APPROX-VC-2", vc_list);
-            }
-            vc_list.erase(vc_list.begin(), vc_list.end());
         }
         vc_output("CNF-SAT-VC", vc_list);
+        vc_list.erase(vc_list.begin(), vc_list.end());
         totSATtimes.push_back(CPUtimes);      
 
                 //sets the arguments for the threads in their respective structs

@@ -376,7 +376,9 @@ void *VCSAT_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
+        std::cout << "10" << std::end;
         (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
+        std::cout << "20" << std::end;
     }
 
     pthread_exit(NULL);

@@ -540,7 +540,9 @@ void *io_thread(void *args){
         if((count % 10) == 0){
             std::cout << "31" << std::endl;
             means[0].push_back(vectomean(totSATtimes));
+            std::cout << "31.1" << std::endl;
             means[1].push_back(vectomean(totVC1times));
+            std::cout << "31.2" << std::endl;
             means[2].push_back(vectomean(totVC2times));
             std::cout << "32" << std::endl;
             stddev[0].push_back(vectosd(totSATtimes));

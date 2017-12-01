@@ -219,10 +219,10 @@ void *VC2_thread(void *args){
 void *VCSAT_thread(void *args){
     struct ArgsStruct *VCSATArgs;
     VCSATArgs = (struct ArgsStruct *) args;
-
+    std::cout << "SAT1" << std::endl;
     const std::vector< std::pair<int,int> > E_arg = VCSATArgs->Edge;
     const double n = (double)VCSATArgs->num_vert;
-
+    std::cout << "SAT2" << std::endl;
     int final_k = n;
 
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
@@ -328,7 +328,7 @@ void *VCSAT_thread(void *args){
         solver.reset (new Minisat::Solver());
     }
 
-
+    std::cout << "SATE" << std::endl;
     clockid_t cid;
     int retcode;
     retcode = pthread_getcpuclockid(pthread_self(), &cid);
@@ -456,7 +456,7 @@ void *io_thread(void *args){
         datafile.close();//remove when ready to submit
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
-            
+            std::cout << "Threads Start" << std::endl;
             create_VCSAT = pthread_create(&VCSAT_pid, NULL, VCSAT_thread, (void *)&VCSATArgs);
             if (create_VCSAT != 0){
                 std::cerr << "Error: Couldn't create VCSAT thread; error #" << create_VCSAT << std::endl;

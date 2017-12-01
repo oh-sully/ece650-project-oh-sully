@@ -142,8 +142,9 @@ void vc_output(std::string algorithm, std::vector<int> vc){
         if (s != vc.size() - 1){
             std::cout << ",";
         }
-        else if (algorithm == "APPROX-VC-2"){
+        else{
             std::cout << std::endl;
+            std::cout << "algorithm = " << algorithm << std::endl;
         }
     }
 }

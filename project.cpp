@@ -428,22 +428,22 @@ void *io_thread(void *args){
         VC1Args.user_input = ioArgs.user_input;
         VC1Args.edges = ioArgs.edges;
         VC1Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = &vc_list;
-        VC1Args.CPUtimes = &CPUtimes;
+        VC1Args.vc_list = ioArgs.vc_list;
+        VC1Args.CPUtimes = ioArgs.CPUtimes;
 
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
         VC2Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = &vc_list;
-        VC2Args.CPUtimes = &CPUtimes;
+        VC1Args.vc_list = ioArgs.vc_list;
+        VC2Args.CPUtimes = ioArgs.CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
         VCSATArgs.edges = ioArgs.edges;
         VCSATArgs.num_vert = ioArgs.num_vert;
         VCSATArgs.num_edges = ioArgs.num_edges;
         VCSATArgs.Edge = ioArgs.Edge;
-        VC1Args.vc_list = &vc_list;
-        VC1Args.CPUtimes = &CPUtimes;
+        VC1Args.vc_list = ioArgs.vc_list;
+        VC1Args.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit
@@ -508,7 +508,7 @@ int main() {
     //ioArgs.edges = edges;
     //ioArgs.num_vert = num_vert;
     int create_io;
-
+    std::cout << "HERE" << std::endl;
     create_io = pthread_create(&io_pid, NULL, io_thread, NULL);
     if (create_io != 0){
         std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;

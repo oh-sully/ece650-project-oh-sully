@@ -372,6 +372,9 @@ void *VCSAT_thread(void *args){
     }
     else{
         std::cout << "1" << std::endl;
+        double pc = pclock("VCSAT CPU Time:   ", cid);
+        std::cout << "1.5" << std::endl;
+        std::cout << "pc = " << pc << std::endl;
         (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
         std::cout << "2" << std::endl;
     }

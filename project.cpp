@@ -48,7 +48,7 @@ double pclock(char *msg, clockid_t cid){
     datafile.close();
     
     std::cout << "1.2" << std::endl;
-    sprintf(buffer, "9.99999");
+    sprintf(buffer, '9');
     //sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     std::cout << "1.3" << std::endl;
     CPUtime = std::stod(buffer);

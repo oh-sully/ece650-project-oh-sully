@@ -37,17 +37,9 @@ double pclock(/*char *msg, */clockid_t cid){
     char buffer[20];
     double CPUtime;
 
-    //printf("%s", msg);
     if (clock_gettime(cid, &ts) == -1){
         std::cout << "Error with gettime" << std::endl;
     }
-    /*
-    std::fstream datafile;
-    datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
-    datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
-    datafile.close();
-    */
-    //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
     return CPUtime;
@@ -138,15 +130,6 @@ public:
             this->edit(r, v, 0);
         }
     }
-   //prints the adjacency matrix
-    void print() {        
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++){
-                std::cout << this->value(r,c) << "  ";
-            }
-            std::cout << std::endl;
-        }
-    }
 };
 
 
@@ -198,7 +181,6 @@ void *VC1_thread(void *args){
         (*(VC1Args->vc_list)).push_back(most_edges);
         edges_cpy.clear_edges(most_edges);
     }
-    //vc_output("APPROX-VC-1", VC1Args->vc_list);
     (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
     
 
@@ -236,7 +218,6 @@ void *VC2_thread(void *args){
             }
         }
     }
-    //vc_output("APPROX-VC-2", *(VC2Args->vc_list));
     (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
     
 
@@ -350,7 +331,6 @@ void *VCSAT_thread(void *args){
                 }
             }
             *(VCSATArgs->vc_list) = output;
-            //vc_output("CNF-SAT-VC", output);
         }
 
         if (res==1){
@@ -383,11 +363,6 @@ void *VCSAT_thread(void *args){
 void *io_thread(void *args){
 
     struct ArgsStruct ioArgs;
-    //struct ArgsStruct *ioArgs;
-    //ioArgs = (struct ArgsStruct *) args;
-    //std::string user_input = "V 0";
-    //int num_vert = 0;
-    //Matrix edges = Matrix(0, 0, 0);
     std::vector<int> vc_list;
     std::vector<double> CPUtimes;
     std::vector< std::vector<double> > totVC1times;
@@ -397,7 +372,6 @@ void *io_thread(void *args){
     ioArgs.user_input = "V 0";
     ioArgs.edges = Matrix(0,0,0);
     ioArgs.num_vert = 0;
-    //ioArgs.Edge = Edge;
     ioArgs.vc_list = &vc_list;
     ioArgs.CPUtimes = &CPUtimes;
     std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
@@ -409,8 +383,6 @@ void *io_thread(void *args){
     struct ArgsStruct VCSATArgs, VC1Args, VC2Args;
     int create_VCSAT, create_VC1, create_VC2;
 
-    //clockid_t VCSAT_cid, VC1_cid, VC2_cid;
-    //struct timespec ts;
     std::vector< std::vector<double> > means;
     std::vector<double> SATmeans;
     std::vector<double> VC1means;
@@ -503,11 +475,6 @@ void *io_thread(void *args){
             pthread_join(VCSAT_pid, NULL);
             vc_output("CNF-SAT-VC", vc_list);
 
-
-            //cpulockid = pthread_getcpuclockid(VCSAT_pid, &VCSAT_cid);
-            //clock_gettime(VCSAT_cid, &ts);
-            //printf("VCSAT_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VCSAT_time: 1    ", VCSAT_cid);
         }
         totVC1times.push_back(CPUtimes);        
         std::cout << "V1 Start" << std::endl;
@@ -519,10 +486,6 @@ void *io_thread(void *args){
             pthread_join(VC1_pid, NULL);
             vc_output("APPROX-VC-1", vc_list);
 
-            //cpulockid = pthread_getcpuclockid(VC1_pid, &VC1_cid);
-            //clock_gettime(VC1_cid, &ts);
-            //printf("VC1_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VC1_time: 1    ", VC1_cid);
         }
         totVC2times.push_back(CPUtimes);
         std::cout << "V2 Start" << std::endl;
@@ -534,27 +497,17 @@ void *io_thread(void *args){
             pthread_join(VC2_pid, NULL);
             vc_output("APPROX-VC-2", vc_list);
 
-            //cpulockid = pthread_getcpuclockid(VC2_pid, &VC2_cid);
-            //clock_gettime(VC2_cid, &ts);
-            //printf("VC2_time: %4ld.%03ld\n", ts.tv_sec, ts.tv_nsec / 1000000);
-            //pclock("VC2_time: 1    ", VC2_cid);
         }
-        std::cout << "end first graph" << std::endl;
         totSATtimes.push_back(CPUtimes);
-        std::cout << "30" << std::endl;
 
         if((count % 10) == 0){
-            std::cout << "31" << std::endl;
             SATmeans.push_back(vectomean(totSATtimes));
             VC1means.push_back(vectomean(totVC1times));
             VC2means.push_back(vectomean(totVC2times));
-            std::cout << "32" << std::endl;
             SATstddev.push_back(vectosd(totSATtimes));
             VC1stddev.push_back(vectosd(totVC1times));
             VC2stddev.push_back(vectosd(totVC2times));
-            std::cout << "33" << std::endl;
         }
-        std::cout << "40" << std::endl;
     }
 
     means.push_back(SATmeans);
@@ -564,7 +517,6 @@ void *io_thread(void *args){
     stddev.push_back(VC1stddev);
     stddev.push_back(VC2stddev);
 
-    std::cout << "out of loop" << std::endl;
     graphs.close();
 
     std::vector<int> X;
@@ -574,7 +526,6 @@ void *io_thread(void *args){
     X.push_back(12);
     //X.push_back(15);
     //X.push_back(18);
-    std::cout << "50" << std::endl;
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit

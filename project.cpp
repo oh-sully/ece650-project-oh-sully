@@ -195,9 +195,9 @@ void *VC2_thread(void *args){
         for (int c = 0; c < VC2Args->num_vert; c++){
             if (edges_cpy.value(r,c) == true) {
                 std::cout << "VC2-1" << std::endl;
-                (*(VC2Args->vc_list)).push_back(r);
+                //(*(VC2Args->vc_list)).push_back(r);
                 std::cout << "VC2-2" << std::endl;
-                (*(VC2Args->vc_list)).push_back(c);
+                //(*(VC2Args->vc_list)).push_back(c);
                 std::cout << "VC2-3" << std::endl;
                 edges_cpy.clear_edges(r);
                 edges_cpy.clear_edges(c);

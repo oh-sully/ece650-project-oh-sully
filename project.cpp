@@ -127,7 +127,7 @@ struct ArgsStruct {
     Matrix* edges;
     int* num_vert;
     int* num_edges;
-    std::vector<int>* vc_list;
+    std::vector<int> vc_list;
 };
 
 
@@ -151,8 +151,8 @@ void *VC1_thread(void *args){
         (*(VC1Args->vc_list)).push_back(most_edges);
         edges_cpy.clear_edges(most_edges);
     }
-    vc_output("APPROX-VC-1", *(VC1Args->vc_list));
-    (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
+    vc_output("APPROX-VC-1", VC1Args->vc_list);
+    VC1Args->vc_list.erase(VC1Args->vc_list.begin(), VC1Args->vc_list.end());
     
 
     clockid_t cid;
@@ -180,16 +180,16 @@ void *VC2_thread(void *args){
         //adds both vertices from the edge to 
         for (int c = 0; c < *(VC2Args->num_vert); c++){
             if (edges_cpy.value(r,c) == true) {
-                (*(VC2Args->vc_list)).push_back(r);
-                (*(VC2Args->vc_list)).push_back(c);
+                VC2Args->vc_list.push_back(r);
+                VC2Args->vc_list.push_back(c);
                 edges_cpy.clear_edges(r);
                 edges_cpy.clear_edges(c);
                 break;
             }
         }
     }
-    vc_output("APPROX-VC-2", *(VC2Args->vc_list));
-    (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
+    vc_output("APPROX-VC-2", VC2Args->vc_list);
+    VC2Args->vc_list.erase(VC2Args->vc_list.begin(), VC2Args->vc_list.end());
     
 
     clockid_t cid;
@@ -289,14 +289,14 @@ void *VCSAT_thread(void *args){
         //binary search; changing k depending on whether k was satisfiable or not
         if (sat == 1){
             //if sat, make sure previous vc_list is of size 'k' filled with '-1's
-            (*(VCSATArgs->vc_list)).resize(0);
-            (*(VCSATArgs->vc_list)).resize(k, -1);
+            VCSATArgs->vc_list.resize(0);
+            VCSATArgs->vc_list.resize(k, -1);
 
             for (int c = 0; c < k; c++){
                 for (int n = 0; n < *(VCSATArgs->num_vert); n++){
                     //if true, add vertex 'n' to the vertex cover
                     if (solver->modelValue(lits[n*k+c]) == Minisat::l_True){
-                        (*(VCSATArgs->vc_list)).push_back(n);
+                        VCSATArgs->vc_list.push_back(n);
                     }
                     else if (solver->modelValue(lits[n*k+c]) == Minisat::l_False){
                         continue;
@@ -328,20 +328,20 @@ void *VCSAT_thread(void *args){
     } //end of reduction/binary search
     //if no sat conditions were found for any 'k' attempted, set vertex cover to all vertices
     if (sat_flag == 0){
-        (*(VCSATArgs->vc_list)).resize(0);
-        (*(VCSATArgs->vc_list)).resize(*(VCSATArgs->num_vert));
+        VCSATArgs->vc_list.resize(0);
+        VCSATArgs->vc_list.resize(*(VCSATArgs->num_vert));
         for (int j = 0; j < *(VCSATArgs->num_vert); j++){
-            (*(VCSATArgs->vc_list)).push_back(j);
+            VCSATArgs->vc_list.push_back(j);
         }
     }
     //print outout
-    vc_output("CNF-SAT-VC", *(VCSATArgs->vc_list));
+    vc_output("CNF-SAT-VC", VCSATArgs->vc_list);
     //clear vectors and reset solver
     while(lits.size() > 0){
         lits.pop();
     }
     solver.reset(new Minisat::Solver());
-    (*(VCSATArgs->vc_list)).erase((*(VCSATArgs->vc_list)).begin(), (*(VCSATArgs->vc_list)).end());
+    VCSATArgs->vc_list.erase(VCSATArgs->vc_list.begin(), VCSATArgs->vc_list.end());
     
 
 
@@ -501,7 +501,7 @@ int main() {
     ioArgs.user_input = &user_input;
     ioArgs.edges = &edges;
     ioArgs.num_vert = &num_vert;
-    ioArgs.vc_list = &vc_list;
+    ioArgs.vc_list = vc_list;
     int create_io;
 
     create_io = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);

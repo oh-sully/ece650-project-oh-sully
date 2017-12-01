@@ -177,7 +177,7 @@ void *VC1_thread(void *args){
     else{
         pclock("VC1 CPU Time:   ", cid);
     }
-
+    std::cout << "VC1-5" << std::endl;
 
     pthread_exit(NULL);
 }

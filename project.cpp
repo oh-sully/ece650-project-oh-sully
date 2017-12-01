@@ -33,6 +33,7 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
 
 //prints msg and the cpu time
 double pclock(char *msg, clockid_t cid){
+    std::cout << "1.01" << std::endl;
     struct timespec ts;
     char* buffer;
     double CPUtime;

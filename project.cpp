@@ -480,7 +480,6 @@ void *io_thread(void *args){
             }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
-        vc_output("APPROX-VC-1", vc_list);
         totVC1times.push_back(CPUtimes);
 
         VC2Args.user_input = ioArgs.user_input;

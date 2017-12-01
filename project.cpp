@@ -465,7 +465,7 @@ void *io_thread(void *args){
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
         count++;
         //set range to run_number < 10 when you want the 10 runs
-        for (int run_number = 0; run_number < 1; run_number++){
+        for (int run_number = 0; run_number < 10; run_number++){
             
             create_VCSAT = pthread_create(&VCSAT_pid, NULL, VCSAT_thread, (void *)&VCSATArgs);
             if (create_VCSAT != 0){
@@ -478,7 +478,7 @@ void *io_thread(void *args){
         totSATtimes.push_back(CPUtimes);      
         vc_list.erase(vc_list.begin(), vc_list.end());
 
-        for (int run_number = 0; run_number < 1; run_number++){
+        for (int run_number = 0; run_number < 10; run_number++){
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
                 std::cerr << "Error: Couldn't create VC1 thread; error #" << create_VC1 << std::endl;
@@ -490,7 +490,7 @@ void *io_thread(void *args){
         totVC1times.push_back(CPUtimes);
         vc_list.erase(vc_list.begin(), vc_list.end());
 
-        for (int run_number = 0; run_number < 1; run_number++){
+        for (int run_number = 0; run_number < 10; run_number++){
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){
                 std::cerr << "Error: Couldn't create VC2 thread; error #" << create_VC2 << std::endl;

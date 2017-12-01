@@ -354,13 +354,13 @@ void *io_thread(void *args){
     std::vector<int> vc_list;
     std::vector<double> CPUtimes;
     std::vector<std::pair<int,int>> Edge;
-    struct ArgsStruct ioArgs;
     ioArgs.user_input = "V 0";
     ioArgs.edges = Matrix(0,0,0);
     ioArgs.num_vert = 0;
     //ioArgs.Edge = Edge;
     ioArgs.vc_list = &vc_list;
     ioArgs.CPUtimes = &CPUtimes;
+    std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     int vert1, vert2;
     char command;
@@ -446,7 +446,6 @@ void *io_thread(void *args){
         VC1Args.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
-        std::ifstream graphs ("../graphs-input.txt"); //to remove when ready to submit
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit
         datafile.close();//remove when ready to submit
         //set range to run_number < 10 when you want the 10 runs

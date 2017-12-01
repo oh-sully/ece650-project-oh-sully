@@ -412,7 +412,13 @@ void *io_thread(void *args){
     //clockid_t VCSAT_cid, VC1_cid, VC2_cid;
     //struct timespec ts;
     std::vector< std::vector<double> > means;
+    std::vector<double> SATmeans;
+    std::vector<double> VC1means;
+    std::vector<double> VC2means;
     std::vector< std::vector<double> > stddev; //[algorithm][vertex]
+    std::vector<double> SATstddev;
+    std::vector<double> VC1stddev;
+    std::vector<double> VC2stddev;
 
     while(true){
         
@@ -539,19 +545,25 @@ void *io_thread(void *args){
 
         if((count % 10) == 0){
             std::cout << "31" << std::endl;
-            means[0].push_back(vectomean(totSATtimes));
-            std::cout << "31.1" << std::endl;
-            means[1].push_back(vectomean(totVC1times));
-            std::cout << "31.2" << std::endl;
-            means[2].push_back(vectomean(totVC2times));
+            SATmeans.push_back(vectomean(totSATtimes));
+            VC1means.push_back(vectomean(totVC1times));
+            VC2means.push_back(vectomean(totVC2times));
             std::cout << "32" << std::endl;
-            stddev[0].push_back(vectosd(totSATtimes));
-            stddev[1].push_back(vectosd(totVC1times));
-            stddev[2].push_back(vectosd(totVC2times));
+            SATstddev.push_back(vectosd(totSATtimes));
+            VC1stddev.push_back(vectosd(totVC1times));
+            VC2stddev.push_back(vectosd(totVC2times));
             std::cout << "33" << std::endl;
         }
         std::cout << "40" << std::endl;
     }
+
+    means.push_back(SATmeans);
+    means.push_back(VC1means);
+    means.push_back(VC2means);
+    stddev.push_back(SATstddev);
+    stddev.push_back(VC1stddev);
+    stddev.push_back(VC2stddev);
+
     std::cout << "out of loop" << std::endl;
     graphs.close();
 

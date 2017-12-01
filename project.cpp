@@ -33,28 +33,21 @@ void ReplaceStringInPlace(std::string& subject, const std::string& search, const
 
 //prints msg and the cpu time
 double pclock(char *msg, clockid_t cid){
-    std::cout << "1.01" << std::endl;
     struct timespec ts;
     char* buffer;
     double CPUtime;
-    std::cout << "1.05" << std::endl;
+
+    //printf("%s", msg);
     if (clock_gettime(cid, &ts) == -1){
         std::cout << "Error with gettime" << std::endl;
     }
-    std::cout << "1.1" << std::endl;
-    /*
     std::fstream datafile;
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
     datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
     datafile.close();
-    */
-    
-    std::cout << "1.2" << std::endl;
-    sprintf(buffer, "9");
-    //sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
-    std::cout << "1.3" << std::endl;
+    //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
-    std::cout << "CPUtime: " << CPUtime << std::endl;
     return CPUtime;
 }
 
@@ -379,11 +372,10 @@ void *VCSAT_thread(void *args){
     }
     else{
         std::cout << "1" << std::endl;
-        std::cout << pclock("VCSAT CPU Time:   ", cid) << std::endl;
         double pc = pclock("VCSAT CPU Time:   ", cid);
         std::cout << "1.5" << std::endl;
         std::cout << "pc = " << pc << std::endl;
-        (*(VCSATArgs->CPUtimes)).push_back(pc);
+        (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
         std::cout << "2" << std::endl;
     }
 

@@ -217,6 +217,7 @@ void *VC2_thread(void *args){
             }
         }
     }
+    (*(VC2Args->vc_list)).erase((*(VC2Args->vc_list)).begin(), (*(VC2Args->vc_list)).end());
     
 
     clockid_t cid;

@@ -331,7 +331,7 @@ void *VCSAT_thread(void *args){
         (*(VCSATArgs->vc_list)).resize(0);
         (*(VCSATArgs->vc_list)).resize(*(VCSATArgs->num_vert));
         for (int j = 0; j < *(VCSATArgs->num_vert); j++){
-            (*(VCSATArgs->vc_list[j])) = j;
+            VCSATArgs->vc_list[j] = j;
         }
     }
     //print outout

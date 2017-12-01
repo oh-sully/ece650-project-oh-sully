@@ -46,8 +46,11 @@ double pclock(char *msg, clockid_t cid){
     datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
     datafile.close();
     //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    std::cout << "1" << std::endl;
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    std::cout << "2" << std::endl;
     CPUtime = std::stod(buffer);
+    std::cout << "CPUtime: " << CPUtime << "; type: " << std::typeid(CPUtime).name() << std::endl;
     return CPUtime;
 }
 
@@ -371,12 +374,7 @@ void *VCSAT_thread(void *args){
         std::cerr << "Error with the damn retcode SAT" << std::endl;
     }
     else{
-        std::cout << "1" << std::endl;
-        double pc = pclock("VCSAT CPU Time:   ", cid);
-        std::cout << "1.5" << std::endl;
-        std::cout << "pc = " << pc << std::endl;
         (*(VCSATArgs->CPUtimes)).push_back(pclock("VCSAT CPU Time:   ", cid));
-        std::cout << "2" << std::endl;
     }
 
     pthread_exit(NULL);

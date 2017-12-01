@@ -434,7 +434,7 @@ void *io_thread(void *args){
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
         VC2Args.num_vert = ioArgs.num_vert;
-        VC1Args.vc_list = ioArgs.vc_list;
+        VC2Args.vc_list = ioArgs.vc_list;
         VC2Args.CPUtimes = ioArgs.CPUtimes;
 
         VCSATArgs.user_input = ioArgs.user_input;
@@ -442,8 +442,8 @@ void *io_thread(void *args){
         VCSATArgs.num_vert = ioArgs.num_vert;
         VCSATArgs.num_edges = ioArgs.num_edges;
         VCSATArgs.Edge = ioArgs.Edge;
-        VC1Args.vc_list = ioArgs.vc_list;
-        VC1Args.CPUtimes = ioArgs.CPUtimes;
+        VCSATArgs.vc_list = ioArgs.vc_list;
+        VCSATArgs.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
 
         datafile << "#X       Y      STDDEV\n" << std::endl;//remove when ready to submit

@@ -160,12 +160,13 @@ void *VC1_thread(void *args){
         }
         std::cout << "VC1-1" << std::endl;
         (*(VC1Args->vc_list)).push_back(most_edges);
-        std::cout << "VC1-1" << std::endl;
+        std::cout << "VC1-2" << std::endl;
         edges_cpy.clear_edges(most_edges);
     }
     //vc_output("APPROX-VC-1", VC1Args->vc_list);
+    std::cout << "VC1-3" << std::endl;
     (*(VC1Args->vc_list)).erase((*(VC1Args->vc_list)).begin(), (*(VC1Args->vc_list)).end());
-    
+    std::cout << "VC1-4" << std::endl;
 
     clockid_t cid;
     int retcode;

@@ -494,7 +494,7 @@ void *io_thread(void *args){
         VCSATArgs.vc_list = ioArgs.vc_list;
         VCSATArgs.CPUtimes = ioArgs.CPUtimes;
         ioArgs.Edge.erase(ioArgs.Edge.begin(), ioArgs.Edge.end());
-
+        std::cout << "SAT start" << std::endl;
         count++;
         //set range to run_number < 10 when you want the 10 runs
         for (int run_number = 0; run_number < 1; run_number++){
@@ -513,7 +513,7 @@ void *io_thread(void *args){
             //pclock("VCSAT_time: 1    ", VCSAT_cid);
         }
         totVC1times.push_back(CPUtimes);        
-
+        std::cout << "V1 Start" << std::endl;
         for (int run_number = 0; run_number < 1; run_number++){
             create_VC1 = pthread_create(&VC1_pid, NULL, VC1_thread, (void *)&VC1Args);
             if (create_VC1 != 0){
@@ -528,7 +528,7 @@ void *io_thread(void *args){
             //pclock("VC1_time: 1    ", VC1_cid);
         }
         totVC2times.push_back(CPUtimes);
-
+        std::cout << "V2 Start" << std::endl;
         for (int run_number = 0; run_number < 1; run_number++){
             create_VC2 = pthread_create(&VC2_pid, NULL, VC2_thread, (void *)&VC2Args);
             if (create_VC2 != 0){

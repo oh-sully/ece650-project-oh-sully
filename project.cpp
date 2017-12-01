@@ -37,7 +37,6 @@ double pclock(char *msg, clockid_t cid){
     char* buffer;
     double CPUtime;
 
-    //printf("%s", msg);
     if (clock_gettime(cid, &ts) == -1){
         std::cout << "Error with gettime" << std::endl;
     }
@@ -47,7 +46,6 @@ double pclock(char *msg, clockid_t cid){
     datafile << msg << ts.tv_sec << "." << std::right << std::setfill('0') << ts.tv_nsec / 1000 << std::endl;
     datafile.close();
     
-    //printf("%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
     std::cout << "CPUtime: " << CPUtime << std::endl;

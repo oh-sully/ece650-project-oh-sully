@@ -40,7 +40,7 @@ double pclock(/*char *msg, */clockid_t cid){
     if (clock_gettime(cid, &ts) == -1){
         std::cout << "Error with gettime" << std::endl;
     }
-    sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    buffer = sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
     return CPUtime;
 }

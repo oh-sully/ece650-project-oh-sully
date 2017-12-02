@@ -572,8 +572,8 @@ void *io_thread(void *args){
             std::cout << "mean VC1times: " << vecvectomean(totVC1times) << std::endl;
             //std::cout << "mean VC2times: " << vecvectomean(totVC2times) << std::endl;
             std::cout << "mean SATstddev: " << vecvectosd(totSATtimes) << std::endl;
-            std::cout << "mean VC1stddev: " << vecvectosd(totSATtimes) << std::endl;
-            //std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
+            std::cout << "mean VC1stddev: " << vecvectosd(totVC1times) << std::endl;
+            //std::cout << "mean VC2stddev: " << vecvectosd(totVC2times) << std::endl;
             std::cout << "----------------------------------------------------------------------" << std::endl;
 
             totSATtimes.clear();

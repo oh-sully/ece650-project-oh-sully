@@ -70,7 +70,7 @@ double vectomean(std::vector<double> data){
 }
 
 double vecvectosd(std::vector< std::vector<double> > data){
-    double u = vectomean(data);
+    double u = vecvectomean(data);
     int sd = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){

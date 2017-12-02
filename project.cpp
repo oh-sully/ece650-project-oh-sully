@@ -58,7 +58,7 @@ double vectomean(std::vector< std::vector<double> > data){
     return mean;
 }
 
-double vectomean(std::vector<double> data){
+double vectormean(std::vector<double> data){
     double mean = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
@@ -84,7 +84,7 @@ double vectosd(std::vector< std::vector<double> > data){
     return sd;
 }
 
-double vectosd(std::vector<double> data){
+double vectorsd(std::vector<double> data){
     double u = vectomean(data);
     int sd = 0;
     int N = 0;
@@ -549,10 +549,10 @@ void *io_thread(void *args){
             SATstddev.push_back(vectosd(totSATtimes));
             VC1stddev.push_back(vectosd(totVC1times));
             VC2stddev.push_back(vectosd(totVC2times));
-            VC1rmeans.push_back(vectomean(VC1rmeans));
-            VC2rmeans.push_back(vectomean(VC2rmeans));
-            VC1rsd.push_back(vectosd(VC1rmeans));
-            VC2rsd.push_back(vectosd(VC2rmeans));
+            VC1rmeans.push_back(vectormean(VC1rmeans));
+            VC2rmeans.push_back(vectormean(VC2rmeans));
+            VC1rsd.push_back(vectorsd(VC1rmeans));
+            VC2rsd.push_back(vectorsd(VC2rmeans));
         }
     }
     graphs.close();

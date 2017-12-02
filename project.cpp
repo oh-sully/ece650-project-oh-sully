@@ -58,6 +58,17 @@ double vectomean(std::vector< std::vector<double> > data){
     return mean;
 }
 
+double vectomean(std::vector<double> data){
+    double mean = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        mean += data[aa][ab];
+        N++;
+    }
+    mean = mean / N;
+    return mean;
+}
+
 double vectosd(std::vector< std::vector<double> > data){
     double u = vectomean(data);
     int sd = 0;
@@ -67,6 +78,19 @@ double vectosd(std::vector< std::vector<double> > data){
             sd += (data[aa][ab] - u) * (data[aa][ab] - u);
             N++;
         }
+    }
+    sd = sd / N;
+    sd = sqrt(sd);
+    return sd;
+}
+
+double vectosd(std::vector<double> data){
+    double u = vectomean(data);
+    int sd = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        sd += (data[aa][ab] - u) * (data[aa][ab] - u);
+        N++;
     }
     sd = sd / N;
     sd = sqrt(sd);
@@ -390,6 +414,18 @@ void *io_thread(void *args){
     std::vector<double> VC1stddev;
     std::vector<double> VC2stddev;
 
+    double vcstd = 0;
+    std::vector< std::vector<double> > rmeans;
+    std::vector< std::vector<double> > VC1rmeans;
+    std::vector< std::vector<double> > VC2rmeans;
+    std::vector<double> VC1ratios;
+    std::vector<double> VC2ratios;
+    double VC1ratio;
+    double VC2ratio;
+    std::vector< std::vector<double> > rsd;
+    std::vector< std::vector<double> > VC1rsd;
+    std::vector< std::vector<double> > VC2rsd;
+
     while(true){
         
         if (graphs.is_open()){
@@ -460,6 +496,7 @@ void *io_thread(void *args){
             pthread_join(VCSAT_pid, NULL);
         }
         vc_output("CNF-SAT-VC", vc_list);
+        vcstd = (double)vc_list.size();
         vc_list.erase(vc_list.begin(), vc_list.end());
         totSATtimes.push_back(CPUtimes);      
 
@@ -477,6 +514,7 @@ void *io_thread(void *args){
             pthread_join(VC1_pid, NULL);
             if (run_number == 9){
                 vc_output("APPROX-VC-1", vc_list);
+                VC1ratio =((double)vc_list.size()) / vcstd;
             }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
@@ -495,10 +533,14 @@ void *io_thread(void *args){
             pthread_join(VC2_pid, NULL);
             if (run_number == 9){
                 vc_output("APPROX-VC-2", vc_list);
+                VC2ratio = ((double)vc_list.size()) / vcstd;
             }
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
         totVC2times.push_back(CPUtimes);
+        
+        VC1ratios.push_back(VC1ratio);
+        VC2ratios.push_back(VC2ratio);
 
         if((count % 10) == 0){
             SATmeans.push_back(vectomean(totSATtimes));
@@ -507,6 +549,10 @@ void *io_thread(void *args){
             SATstddev.push_back(vectosd(totSATtimes));
             VC1stddev.push_back(vectosd(totVC1times));
             VC2stddev.push_back(vectosd(totVC2times));
+            VC1rmeans.push_back(vectomean(VC1rmeans));
+            VC2rmeans.push_back(vectomean(VC2rmeans));
+            VC1rsd.push_back(vectosd(VC1rmeans));
+            VC2rsd.push_back(vectosd(VC2rmeans));
         }
     }
     graphs.close();
@@ -517,6 +563,11 @@ void *io_thread(void *args){
     stddev.push_back(SATstddev);
     stddev.push_back(VC1stddev);
     stddev.push_back(VC2stddev);
+    ratios.push_back(VC1rmeans);
+    ratios.push_back(VC2rmeans);
+    rsd.push_back(VC1rsd);
+    rsd.push_back(VC2rsd);
+
 
     std::vector<int> X;
     X.push_back(3);
@@ -526,7 +577,7 @@ void *io_thread(void *args){
     //X.push_back(15);
     //X.push_back(18);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
-    datafile << "#X     SAT    SSD    VC1    V1SD    VC2   V2SD\n" << std::endl;//remove when ready to submit
+    datafile << "#X     SATtime    SATsd    VC1time    VC1sd    VC2time   VC2sd    VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit
 
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit
@@ -535,6 +586,9 @@ void *io_thread(void *args){
         datafile << X[bb];
         for (unsigned int bc = 0; bc < means.size(); bc++){
             datafile << "    " << means[bc][bb] << "    " << stddev[bc][bb];
+        }
+        for (unsigned int bc = 0; bc < ratios.size(); bc++){
+            datafile << "    " << ratios[bc][bb] << "    " << rsd[bc][bb];
         }
         datafile << std::endl;
     }

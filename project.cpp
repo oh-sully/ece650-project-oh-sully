@@ -496,7 +496,8 @@ void *io_thread(void *args){
         vc_output("CNF-SAT-VC", vc_list);
         vcstd = (double)vc_list.size();
         vc_list.erase(vc_list.begin(), vc_list.end());
-        totSATtimes.push_back(CPUtimes);      
+        totSATtimes.push_back(CPUtimes);
+        CPUtimes.clear();
 
         //sets the arguments for the threads in their respective structs
         VC1Args.user_input = ioArgs.user_input;
@@ -517,6 +518,7 @@ void *io_thread(void *args){
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
         totVC1times.push_back(CPUtimes);
+        CPUtimes.clear();
 
         VC2Args.user_input = ioArgs.user_input;
         VC2Args.edges = ioArgs.edges;
@@ -536,6 +538,7 @@ void *io_thread(void *args){
             vc_list.erase(vc_list.begin(), vc_list.end());
         }
         totVC2times.push_back(CPUtimes);
+        CPUtimes.clear();
         
         VC1ratios.push_back(VC1ratio);
         VC2ratios.push_back(VC2ratio);

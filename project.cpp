@@ -42,15 +42,15 @@ double pclock(/*char *msg, */clockid_t cid){
     }
     sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
     CPUtime = std::stod(buffer);
-    std::cout << "pclock = " << buffer << std::endl;
+    //std::cout << "pclock = " << buffer << std::endl;
     return CPUtime;
 }
 
 double vecvectomean(std::vector< std::vector<double> > data){
     double mean = 0;
     int N = 0;
-    for (int aa = 0; aa < data.size(); aa++){
-        for (int ab = 0; ab < data[aa].size(); ab++){
+    for (unsigned int aa = 0; aa < data.size(); aa++){
+        for (unsigned int ab = 0; ab < data[aa].size(); ab++){
             mean += data[aa][ab];
             N++;
         }
@@ -62,7 +62,7 @@ double vecvectomean(std::vector< std::vector<double> > data){
 double vectomean(std::vector<double> data){
     double mean = 0;
     int N = 0;
-    for (int aa = 0; aa < data.size(); aa++){
+    for (unsigned int aa = 0; aa < data.size(); aa++){
         mean += data[aa];
         N++;
     }
@@ -74,8 +74,8 @@ double vecvectosd(std::vector< std::vector<double> > data){
     double u = vecvectomean(data);
     double sd = 0;
     int N = 0;
-    for (int aa = 0; aa < data.size(); aa++){
-        for (int ab = 0; ab < data[aa].size(); ab++){
+    for (unsigned int aa = 0; aa < data.size(); aa++){
+        for (unsigned int ab = 0; ab < data[aa].size(); ab++){
             sd += (data[aa][ab] - u) * (data[aa][ab] - u);
             N++;
         }
@@ -89,7 +89,7 @@ double vectosd(std::vector<double> data){
     double u = vectomean(data);
     double sd = 0;
     int N = 0;
-    for (int aa = 0; aa < data.size(); aa++){
+    for (unsigned int aa = 0; aa < data.size(); aa++){
         sd += (data[aa] - u) * (data[aa] - u);
         N++;
     }
@@ -554,6 +554,13 @@ void *io_thread(void *args){
             VC2rmeans.push_back(vectomean(VC2ratios));
             VC1rsd.push_back(vectosd(VC1ratios));
             VC2rsd.push_back(vectosd(VC2ratios));
+
+            std::cout << "mean SATtimes: " << vecvectomean(totSATtimes) << std::endl;
+            std::cout << "mean VC1times: " << vecvectomean(totVC1times) << std::endl;
+            std::cout << "mean VC2times: " << vecvectomean(totVC2times) << std::endl;
+            std::cout << "mean SATstddev: " << vecvectosd(totSATtimes) << std::endl;
+            std::cout << "mean VC1stddev: " << vecvectosd(totSATtimes) << std::endl;
+            std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
         }
     }
     graphs.close();
@@ -576,9 +583,8 @@ void *io_thread(void *args){
     X.push_back(7);
     X.push_back(9);
     X.push_back(11);
-    std::cout << "x size = " << X.size() << std::endl;
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
-    datafile << "#VERTs         SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd        VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
+    datafile << "#X      SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd        VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit
 
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit

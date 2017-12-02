@@ -551,6 +551,9 @@ void *io_thread(void *args){
             VC2rmeans.push_back(vectomean(VC2ratios));
             VC1rsd.push_back(vectosd(VC1ratios));
             VC2rsd.push_back(vectosd(VC2ratios));
+            totSATtimes.clear();
+            totVC1times.clear();
+            totVC2times.clear();
 
             std::cout << "----------------------------------------------------------------------" << std::endl;
             for (int cc = 0; cc < totSATtimes.size(); cc++){

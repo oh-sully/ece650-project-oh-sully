@@ -570,12 +570,13 @@ void *io_thread(void *args){
 
 
     std::vector<int> X;
-    X.push_back(3);
     X.push_back(6);
-    X.push_back(9);
+    X.push_back(8);
+    X.push_back(10);
     X.push_back(12);
-    //X.push_back(15);
-    //X.push_back(18);
+    X.push_back(14);
+    X.push_back(16);
+    X.push_back(3);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X     SATtime    SATsd    VC1time    VC1sd    VC2time   VC2sd    VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit

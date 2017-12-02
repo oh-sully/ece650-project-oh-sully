@@ -18,8 +18,8 @@ include_directories(${CMAKE_SOURCE_DIR}/minisat)
 
 # create the main executable
 ## add additional .cpp files if needed
-add_executable(ece650-project ece650-project.cpp parse_line.cpp parse_line.hpp register.cpp register.hpp vertexAdjList.cpp vertexAdjList.hpp ece650-a4.hpp)
-#add_executable(project project.cpp parse_line.cpp parse_line.hpp register.cpp register.hpp vertexAdjList.cpp vertexAdjList.hpp ece650-a4.hpp)
+#add_executable(ece650-project ece650-project.cpp parse_line.cpp parse_line.hpp register.cpp register.hpp vertexAdjList.cpp vertexAdjList.hpp ece650-a4.hpp)
+add_executable(project project.cpp parse_line.cpp parse_line.hpp register.cpp register.hpp vertexAdjList.cpp vertexAdjList.hpp ece650-a4.hpp)
 add_executable(openfile openfile.cpp)
 
 # link MiniSAT libraries

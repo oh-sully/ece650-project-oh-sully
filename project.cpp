@@ -431,9 +431,6 @@ void *io_thread(void *args){
         
         if (graphs.is_open()){
             getline(graphs, ioArgs.user_input);
-            if (graphs.eof()) {
-                break;
-            }
         }
         else{
             std::cerr << "Error: unable to open file" << std::endl;
@@ -561,6 +558,9 @@ void *io_thread(void *args){
             std::cout << "mean SATstddev: " << vecvectosd(totSATtimes) << std::endl;
             std::cout << "mean VC1stddev: " << vecvectosd(totSATtimes) << std::endl;
             std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
+        }
+        if (graphs.eof()) {
+            break;
         }
     }
     graphs.close();

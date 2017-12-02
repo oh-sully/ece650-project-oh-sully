@@ -551,9 +551,6 @@ void *io_thread(void *args){
             VC2rmeans.push_back(vectomean(VC2ratios));
             VC1rsd.push_back(vectosd(VC1ratios));
             VC2rsd.push_back(vectosd(VC2ratios));
-            totSATtimes.clear();
-            totVC1times.clear();
-            totVC2times.clear();
 
             std::cout << "----------------------------------------------------------------------" << std::endl;
             for (int cc = 0; cc < totSATtimes.size(); cc++){
@@ -575,6 +572,10 @@ void *io_thread(void *args){
             std::cout << "mean VC1stddev: " << vecvectosd(totSATtimes) << std::endl;
             //std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
             std::cout << "----------------------------------------------------------------------" << std::endl;
+
+            totSATtimes.clear();
+            totVC1times.clear();
+            totVC2times.clear();
         }
         if (graphs.eof()) {
             break;

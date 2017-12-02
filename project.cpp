@@ -71,7 +71,7 @@ double vectomean(std::vector<double> data){
 
 double vecvectosd(std::vector< std::vector<double> > data){
     double u = vecvectomean(data);
-    int sd = 0;
+    double sd = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
         for (int ab = 0; ab < data[aa].size(); ab++){
@@ -86,7 +86,7 @@ double vecvectosd(std::vector< std::vector<double> > data){
 
 double vectosd(std::vector<double> data){
     double u = vectomean(data);
-    int sd = 0;
+    double sd = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
         sd += (data[aa] - u) * (data[aa] - u);

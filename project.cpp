@@ -604,6 +604,7 @@ void *io_thread(void *args){
     X.push_back(7);
     X.push_back(9);
     X.push_back(11);
+    X.push_back(13);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
     datafile << "#X      SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd     r1  rsd1  r2  rsd2" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit

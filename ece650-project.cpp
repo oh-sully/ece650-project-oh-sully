@@ -466,7 +466,7 @@ void *io_thread(void *args){
             isss >> check_str;
             //if no edges print a blank line
             if (check_str == "{}" || check_str == "{ }"){
-                std::cout << "CNF-SAT-VC:\n" << "APPROX-VC-1:\n" << "APPROX-VC-2: << std::endl;
+                std::cout << "CNF-SAT-VC: \n" << "APPROX-VC-1: \n" << "APPROX-VC-2: " << std::endl;
                 continue;
             }
             //while you haven't found '>}' aka then end of the input, add the edges to the matrix

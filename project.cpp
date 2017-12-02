@@ -578,7 +578,7 @@ void *io_thread(void *args){
     //X.push_back(15);
     X.push_back(3);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
-    datafile << "#X     SATtime    SATsd    VC1time    VC1sd    VC2time   VC2sd    VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
+    datafile << "#VERTs         SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd        VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit
 
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit

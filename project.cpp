@@ -45,7 +45,7 @@ double pclock(/*char *msg, */clockid_t cid){
     return CPUtime;
 }
 
-double vectomean(std::vector< std::vector<double> > data){
+double vecvectomean(std::vector< std::vector<double> > data){
     double mean = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
@@ -58,7 +58,7 @@ double vectomean(std::vector< std::vector<double> > data){
     return mean;
 }
 
-double vectormean(std::vector<double> data){
+double vectomean(std::vector<double> data){
     double mean = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
@@ -69,7 +69,7 @@ double vectormean(std::vector<double> data){
     return mean;
 }
 
-double vectosd(std::vector< std::vector<double> > data){
+double vecvectosd(std::vector< std::vector<double> > data){
     double u = vectomean(data);
     int sd = 0;
     int N = 0;
@@ -84,7 +84,7 @@ double vectosd(std::vector< std::vector<double> > data){
     return sd;
 }
 
-double vectorsd(std::vector<double> data){
+double vectosd(std::vector<double> data){
     double u = vectomean(data);
     int sd = 0;
     int N = 0;
@@ -543,16 +543,16 @@ void *io_thread(void *args){
         VC2ratios.push_back(VC2ratio);
 
         if((count % 10) == 0){
-            SATmeans.push_back(vectomean(totSATtimes));
-            VC1means.push_back(vectomean(totVC1times));
-            VC2means.push_back(vectomean(totVC2times));
-            SATstddev.push_back(vectosd(totSATtimes));
-            VC1stddev.push_back(vectosd(totVC1times));
-            VC2stddev.push_back(vectosd(totVC2times));
-            VC1rmeans.push_back(vectormean(VC1rmeans));
-            VC2rmeans.push_back(vectormean(VC2rmeans));
-            VC1rsd.push_back(vectorsd(VC1rmeans));
-            VC2rsd.push_back(vectorsd(VC2rmeans));
+            SATmeans.push_back(vecvectomean(totSATtimes));
+            VC1means.push_back(vecvectomean(totVC1times));
+            VC2means.push_back(vecvectomean(totVC2times));
+            SATstddev.push_back(vecvectosd(totSATtimes));
+            VC1stddev.push_back(vecvectosd(totVC1times));
+            VC2stddev.push_back(vecvectosd(totVC2times));
+            VC1rmeans.push_back(vectomean(VC1rmeans));
+            VC2rmeans.push_back(vectomean(VC2rmeans));
+            VC1rsd.push_back(vectosd(VC1rmeans));
+            VC2rsd.push_back(vectosd(VC2rmeans));
         }
     }
     graphs.close();

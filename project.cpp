@@ -549,10 +549,10 @@ void *io_thread(void *args){
             SATstddev.push_back(vecvectosd(totSATtimes));
             VC1stddev.push_back(vecvectosd(totVC1times));
             VC2stddev.push_back(vecvectosd(totVC2times));
-            VC1rmeans.push_back(vectomean(VC1rmeans));
-            VC2rmeans.push_back(vectomean(VC2rmeans));
-            VC1rsd.push_back(vectosd(VC1rmeans));
-            VC2rsd.push_back(vectosd(VC2rmeans));
+            VC1rmeans.push_back(vectomean(VC1ratios));
+            VC2rmeans.push_back(vectomean(VC2ratios));
+            VC1rsd.push_back(vectosd(VC1ratios));
+            VC2rsd.push_back(vectosd(VC2ratios));
         }
     }
     graphs.close();

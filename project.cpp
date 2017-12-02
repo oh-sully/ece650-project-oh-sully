@@ -62,7 +62,7 @@ double vectomean(std::vector<double> data){
     double mean = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
-        mean += data[aa][ab];
+        mean += data[aa];
         N++;
     }
     mean = mean / N;
@@ -89,7 +89,7 @@ double vectosd(std::vector<double> data){
     int sd = 0;
     int N = 0;
     for (int aa = 0; aa < data.size(); aa++){
-        sd += (data[aa][ab] - u) * (data[aa][ab] - u);
+        sd += (data[aa] - u) * (data[aa] - u);
         N++;
     }
     sd = sd / N;

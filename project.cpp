@@ -552,12 +552,26 @@ void *io_thread(void *args){
             VC1rsd.push_back(vectosd(VC1ratios));
             VC2rsd.push_back(vectosd(VC2ratios));
 
+            std::cout << "----------------------------------------------------------------------" << std::endl;
+            for (int cc = 0; cc < totSATtimes.size(); cc++){
+                for (int cd = 0; cd < totSATtimes[cc].size(); cd++){
+                    std::cout << "totSATtimes[" << cc << "][" << cd << "] = " << totSATtimes[cc][cd] << std::endl;
+                }
+            }
+            for (int cc = 0; cc < totVC1times.size(); cc++){
+                for (int cd = 0; cd < totVC1times[cc].size(); cd++){
+                    std::cout << "totVC1times[" << cc << "][" << cd << "] = " << totVC1times[cc][cd] << std::endl;
+                }
+            }
+
+            std::cout << "----------------------------------------------------------------------" << std::endl;
             std::cout << "mean SATtimes: " << vecvectomean(totSATtimes) << std::endl;
             std::cout << "mean VC1times: " << vecvectomean(totVC1times) << std::endl;
-            std::cout << "mean VC2times: " << vecvectomean(totVC2times) << std::endl;
+            //std::cout << "mean VC2times: " << vecvectomean(totVC2times) << std::endl;
             std::cout << "mean SATstddev: " << vecvectosd(totSATtimes) << std::endl;
             std::cout << "mean VC1stddev: " << vecvectosd(totSATtimes) << std::endl;
-            std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
+            //std::cout << "mean VC2stddev: " << vecvectosd(totSATtimes) << std::endl;
+            std::cout << "----------------------------------------------------------------------" << std::endl;
         }
         if (graphs.eof()) {
             break;
@@ -584,7 +598,7 @@ void *io_thread(void *args){
     X.push_back(9);
     X.push_back(11);
     std::ofstream datafile ("../datafile.dat");//to remove when ready to submit
-    datafile << "#X      SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd        VC1ratio    VC1rsd    VC2ratio    VC2rsd" << std::endl;//remove when ready to submit
+    datafile << "#X      SATtime        SATsd        VC1time        VC1sd        VC2time       VC2sd     r1  rsd1  r2  rsd2" << std::endl;//remove when ready to submit
     datafile.close();//remove when ready to submit
 
     datafile.open("../datafile.dat", std::ios::out | std::ios::app);//to remove when ready to submit

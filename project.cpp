@@ -416,15 +416,15 @@ void *io_thread(void *args){
 
     double vcstd = 0;
     std::vector< std::vector<double> > rmeans;
-    std::vector< std::vector<double> > VC1rmeans;
-    std::vector< std::vector<double> > VC2rmeans;
+    std::vector<double> VC1rmeans;
+    std::vector<double> VC2rmeans;
     std::vector<double> VC1ratios;
     std::vector<double> VC2ratios;
     double VC1ratio;
     double VC2ratio;
     std::vector< std::vector<double> > rsd;
-    std::vector< std::vector<double> > VC1rsd;
-    std::vector< std::vector<double> > VC2rsd;
+    std::vector<double> VC1rsd;
+    std::vector<double> VC2rsd;
 
     while(true){
         

@@ -415,7 +415,7 @@ void *io_thread(void *args){
     std::vector<double> VC2stddev;
 
     double vcstd = 0;
-    std::vector< std::vector<double> > rmeans;
+    std::vector< std::vector<double> > ratios;
     std::vector<double> VC1rmeans;
     std::vector<double> VC2rmeans;
     std::vector<double> VC1ratios;

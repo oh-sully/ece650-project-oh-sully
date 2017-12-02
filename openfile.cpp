@@ -1,32 +1,89 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <pthread.h>
 #include <time.h>
+#include <fstream>
+#include <iomanip>
+#include <locale>
+#include <math.h>
 
 //Struct for passing arguments to the threads
 struct ArgsStruct {
-    std::string user_input;
+    std::vector<double>* CPUtimes;
 };
+
+double pclock(clockid_t cid){
+    struct timespec ts;
+    char buffer[20];
+    double CPUtime;
+
+    if (clock_gettime(cid, &ts) == -1){
+        std::cout << "Error with gettime" << std::endl;
+    }
+
+    sprintf(buffer, "%4ld.%06ld\n", ts.tv_sec, ts.tv_nsec / 1000);
+    CPUtime = std::stod(buffer);
+    return CPUtime;
+}
+
+double vectomean(std::vector<double> data){
+    double mean = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        mean += data[aa];
+        N++;
+    }
+    mean = mean / N;
+    return mean;
+}
+
+double vectosd(std::vector<double> data){
+    double u = vectomean(data);
+    double sd = 0;
+    int N = 0;
+    for (int aa = 0; aa < data.size(); aa++){
+        sd += (data[aa] - u) * (data[aa] - u);
+        N++;
+    }
+    sd = sd / N;
+    sd = sqrt(sd);
+    return sd;
+}
 
 //thread for io
 void *io_thread(void *args){
 
     struct ArgsStruct *ioArgs;
     ioArgs = (struct ArgsStruct *) args;
-    ioArgs->user_input = "APPLES";
 
-    std::cout << "user_input (io) = " << ioArgs->user_input << std::endl;
+    clockid_t cid;
+    int retcode;
+    retcode = pthread_getcpuclockid(pthread_self(), &cid);
+    if(retcode){
+        std::cerr << "Error with the damn retcode SAT" << std::endl;
+    }
+    else{
+        double pc = pclock(cid);
+        (*(ioArgs->CPUtimes)).push_back(pc);
+    }
+
     pthread_exit(NULL);
 }
-
-//main function, duh    
+   
 int main() {
     
-    std::string user_input = "V 0";
+    std::vector<double> CPUtimes;
+    std::vector<double> means;
+    means.push_back(10);
+    means.push_back(1);
+    means.push_back(5);
+    means.push_back(5);
+    std::cout << vectosd(means) << std::endl;
     
     pthread_t io_pid;
     struct ArgsStruct ioArgs;
-    ioArgs.user_input = &user_input;
+    ioArgs.CPUtimes = &CPUtimes;
     int create_io;
 
     create_io = pthread_create(&io_pid, NULL, io_thread, (void *)&ioArgs);
@@ -34,9 +91,6 @@ int main() {
         std::cerr << "Error: Couldn't create io thread; error #" << create_io << std::endl;
     }
     pthread_join(io_pid, NULL);
-    
-    std::cout << "user_input (main) = " << user_input << std::endl;
-    std::cout << "user_input (main) = " << &user_input << std::endl;
     
     return 0;
 }
